@@ -1,0 +1,97 @@
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker shade of #06112F */
+            color: #fff;
+        }
+
+        .update-profile-container {
+            background-color: #040e27; /* Darker shade of #06112F */
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 2rem auto;
+            min-height: calc(100vh - 4rem); /* Ensures container covers the viewport height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .update-profile-form {
+            background-color: #06112F; /* Darker shade for nested div */
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .update-profile-form p {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #4a5d7e;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"], input[type="file"], textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #000;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="update-profile-container">
+        <h2>Update Profile</h2>
+        <form method="post" enctype="multipart/form-data" class="update-profile-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Save Changes</button>
+        </form>
+    </div>
+</body>
+</html>
+{% endblock %}

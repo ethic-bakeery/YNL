@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h3, h4 {
+            color: #fff;
+            margin: 0;
+        }
+
+        form {
+            margin: 1rem 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4a5d7e;
+        }
+
+        .post {
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .post img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .post-details {
+            margin-bottom: 1rem;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .post-description {
+            margin: 0.5rem 0;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .post-actions form {
+            display: inline;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #4a5d7e;
+        }
+
+        .auth-links {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Home Page</h3>
+        <h4>Dear {{ user.username }}, welcome to the site</h4>
+        
+        <form method="POST" action="{% url 'home' %}">
+            {% csrf_token %}
+            <input type="text" name="q" placeholder="Search for restaurant" value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if post %}
+            {% for ps in post %}
+                <div class="post">
+                    {% if ps.image %}
+                        <img src="{{ ps.image.url }}" alt="Post Image">
+                    {% endif %}
+                    <div class="post-details">
+                        <p class="post-title">{{ ps.title }}</p>
+                        <p class="post-description">{{ ps.description }}</p>
+                        <div class="post-actions">
+                            <form method="post" action="{% url 'like_post' ps.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Like</button>
+                            </form>
+                            <form method="post" action="{% url 'dislike_post' ps.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Dislike</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% elif query %}
+            <p>No post found.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <div class="auth-links">
+                <a href="{% url 'logout' %}" class="btn">Logout</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
