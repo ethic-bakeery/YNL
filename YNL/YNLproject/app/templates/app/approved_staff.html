@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            background-color: #1e2a49;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #06112F;
+        }
+        tr:nth-child(even) {
+            background-color: #1e2a49;
+        }
+        a {
+            color: #4a5d7e;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            padding: 0.5rem 1rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #4a5d7e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Staff Application Requests</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                    <tr>
+                        <td>{{ application.name }}</td>
+                        <td>{{ application.email }}</td>
+                        <td>{{ application.phone }}</td>
+                        <td>{{ application.message|truncatewords:10 }}</td>
+                        <td>{{ application.status }}</td>
+                        <td>
+                           
+                                <a href="{% url 'approve_request' request_id=application.id %}" class="btn">Approve</a>
+                                <a href="{% url 'reject_request' request_id=application.id %}" class="btn" onclick="return confirm('Are you sure you want to reject this request?');">Reject</a>
+                          
+                                <span>N/A</span>
+                            
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">No applications found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

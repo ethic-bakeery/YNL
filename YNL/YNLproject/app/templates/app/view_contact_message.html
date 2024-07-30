@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Contact Message</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 3rem auto; /* Adjust margin to pull container down */
+            background-color: #1e2a49; /* Background color for better visibility */
+            border-radius: 8px; /* Rounded corners for a polished look */
+        }
+        h2 {
+            color: #fff;
+        }
+        p {
+            margin: 1rem 0;
+        }
+        a {
+            color: #4a5d7e;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #1e2a49;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .back-link:hover {
+            background-color: #4a5d7e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Contact Message Details</h2>
+        <p><strong>First Name:</strong> {{ message.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ message.last_name }}</p>
+        <p><strong>Email:</strong> {{ message.email }}</p>
+        <p><strong>Message:</strong></p>
+        <p>{{ message.message }}</p>
+        <a href="{% url 'admin_contact_messages' %}" class="back-link">Back to Messages</a>
+    </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
-from .models import Profile, Poll, Question, Choice, Feedback, Post, Event, ChatMessage, LiveChatSession, Group, GroupMembership, GroupMessage
+from .models import Profile, Poll,ContactMessage,GroupJoinRequest, Question, StaffApplication, Choice, Feedback, Post, Event, ChatMessage, LiveChatSession, Group, GroupMembership, GroupMessage
 
 # Unregister the default UserAdmin
 admin.site.unregister(User)
@@ -50,6 +50,9 @@ class GroupMembershipAdmin(admin.ModelAdmin):
 class GroupMessageAdmin(admin.ModelAdmin):
     list_display = ('sender', 'group', 'message', 'timestamp')
 
+admin.site.register(GroupJoinRequest)
+admin.site.register(StaffApplication)
+admin.site.register(ContactMessage)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(Question, QuestionAdmin)

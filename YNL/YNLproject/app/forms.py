@@ -51,3 +51,37 @@ class ResetPasswordForm(forms.Form):
 
         if new_password and confirm_password and new_password != confirm_password:
             raise ValidationError("Passwords do not match.")
+        
+from django import forms
+from .models import Profile
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'state', 'phone_number', 'date_of_birth', 'local_government', 'bio', 'profile_picture']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            'bio': forms.Textarea(attrs={'rows': 4}),
+        }
+# forms.py
+from django import forms
+from .models import ContactMessage
+
+class ContactMessageForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = ['first_name', 'last_name', 'email', 'message']
+
+from django import forms
+from .models import StaffApplication
+
+from django import forms
+from .models import StaffApplication
+
+class StaffApplicationForm(forms.ModelForm):
+    class Meta:
+        model = StaffApplication
+        fields = ['name', 'email', 'phone', 'message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 3}),
+        }

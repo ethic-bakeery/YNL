@@ -18,18 +18,32 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.email} - Profile"
 
+class ContactMessage(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} - {self.email}"
+    
+from django.conf import settings
+from django.db import models
 
 class StaffApplication(models.Model):
-    name = models.CharField(max_length=255)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=100)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     message = models.TextField()
     status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Approved', 'Approved')])
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.name} - {self.email}"
+    def save(self, *args, **kwargs):
+        if self.user and StaffApplication.objects.filter(user=self.user).exists():
+            raise ValueError("User has already submitted a request.")
+        super().save(*args, **kwargs)
 
+    
 class Poll(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
@@ -110,18 +124,22 @@ class LiveChatSession(models.Model):
 
     def __str__(self):
         return f"Chat Session created at {self.created_at}"
-
+    
 class Group(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     created_by = models.ForeignKey(User, related_name='created_groups', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    profile_image = models.ImageField(upload_to='group_profiles/', blank=True, null=True)
+    memberships = models.ManyToManyField(User, through='GroupMembership')
+
 
     def __str__(self):
         return self.name
 
-class GroupMembership(models.Model):
-    group = models.ForeignKey(Group, related_name='memberships', on_delete=models.CASCADE)
+
+class GroupMembership(models.Model):  
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='group_memberships')
     user = models.ForeignKey(User, related_name='group_memberships', on_delete=models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
 
@@ -139,3 +157,12 @@ class GroupMessage(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender.email} in {self.group.name} at {self.timestamp}"
+
+class GroupJoinRequest(models.Model):
+    user = models.ForeignKey(User, related_name='group_join_requests', on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, related_name='join_requests', on_delete=models.CASCADE)
+    requested_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
+    def __str__(self):
+        return f"{self.user.email} requested to join {self.group.name}"
+
