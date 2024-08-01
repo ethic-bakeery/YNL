@@ -1,8 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User  # Import the default User model
+from django.contrib.auth.models import User 
 from django.contrib.auth.models import Group, Permission
 from django.db import models
-from django.conf import settings  # To get the custom user model
+from django.conf import settings  
+from django.utils import timezone
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -26,9 +28,6 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} - {self.email}"
-    
-from django.conf import settings
-from django.db import models
 
 class StaffApplication(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
@@ -44,10 +43,6 @@ class StaffApplication(models.Model):
         super().save(*args, **kwargs)
 
     
-
-from django.contrib.auth.models import User
-from django.utils import timezone
-
 class Poll(models.Model):
     name = models.CharField(max_length=50, blank=False)
     description = models.TextField(max_length=1000, blank=True)
@@ -72,21 +67,13 @@ class Vote(models.Model):
     timestamp = models.DateTimeField(default=timezone.now())
 
     class Meta:
-        unique_together = ('user', 'poll')  # Ensure a user can vote only once per poll
+        unique_together = ('user', 'poll')  
 
     def __str__(self):
         poll_name = self.poll.name if self.poll else 'No Poll'
         choice_name = self.choice.text if self.choice else 'No Choice'
         return f"{poll_name} - {choice_name}"
 
-
-# class Feedback(models.Model):
-#     poll = models.ForeignKey(Poll, related_name='feedbacks', on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     comment = models.TextField(blank=True, null=True)
-
-#     def __str__(self):
-#         return f"Feedback by {self.user.email} on {self.poll.title}"
 
 class Post(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
@@ -146,7 +133,6 @@ class Group(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class GroupMembership(models.Model):  
     group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='group_memberships')

@@ -1,15 +1,13 @@
-
 {% extends 'app/user_navbar.html' %}
 
 {% block content %}
 
-<!-- app/templates/app/poll_create.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Poll</title>
+    <title>Create Event</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,6 +39,10 @@
             background-color: #fff;
             color: #000;
         }
+        input[type="datetime-local"] {
+            background-color: #fff;
+            color: #000;
+        }
         button {
             padding: 0.5rem;
             background-color: #28a745;
@@ -57,31 +59,40 @@
 </head>
 <body>
     <div class="container">
-        <h2>Create a New Poll</h2>
+        <h2>Create a New Event</h2>
         <form method="post">
             {% csrf_token %}
-            {{ poll_form.as_p }}
-            <div id="choices">
-                <div class="choice">
-                    {{ choice_form.as_p }}
-                </div>
-            </div>
-            <button type="button" onclick="addChoice()">Add Another Choice</button>
-            <hr class="my-4">
-            <button type="submit">Create Poll</button>
-        </form>
+            <label for="{{ form.title.id_for_label }}">Event Title:</label>
+            {{ form.title }}
 
-        <script type="text/javascript">
-            function addChoice() {
-                const choicesDiv = document.getElementById('choices');
-                const newChoiceHtml = `
-                    <div class="choice">
-                        <input type="text" name="choice_text" placeholder="Enter choice" required>
-                    </div>`;
-                choicesDiv.insertAdjacentHTML('beforeend', newChoiceHtml);
-            }
-        </script>
+            <label for="{{ form.description.id_for_label }}">Event Description:</label>
+            {{ form.description }}
+
+            <label for="{{ form.start_time.id_for_label }}">Start Time:</label>
+            <input 
+                type="datetime-local" 
+                id="{{ form.start_time.id_for_label }}" 
+                name="{{ form.start_time.html_name }}" 
+                value="{{ form.start_time.value|default:"now"|date:"Y-m-dTH:i" }}" 
+                placeholder="YYYY-MM-DDTHH:MM"
+            />
+
+            <label for="{{ form.end_time.id_for_label }}">End Time:</label>
+            <input 
+                type="datetime-local" 
+                id="{{ form.end_time.id_for_label }}" 
+                name="{{ form.end_time.html_name }}" 
+                value="{{ form.end_time.value|default:"now"|date:"Y-m-dTH:i" }}" 
+                placeholder="YYYY-MM-DDTHH:MM"
+            />
+
+            <label for="{{ form.location.id_for_label }}">Location:</label>
+            {{ form.location }}
+
+            <button type="submit">Create Event</button>
+        </form>
     </div>
 </body>
 </html>
+
 {% endblock %}

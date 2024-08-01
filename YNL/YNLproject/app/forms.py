@@ -14,9 +14,26 @@ class ProfileUpdateForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'rows': 3}),
         }
 
-# app/forms.py
-from django import forms
 from .models import Poll, Choice
+
+from .models import Event
+
+from .models import Post
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'description', 'image']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'image': forms.ClearableFileInput(attrs={'multiple': False}),
+        }
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['title', 'description', 'start_time', 'end_time', 'location']
 
 class PollForm(forms.ModelForm):
     class Meta:

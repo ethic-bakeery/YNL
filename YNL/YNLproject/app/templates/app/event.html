@@ -1,0 +1,166 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px; /* Adjust this value to the height of your fixed navbar */
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h3, h4 {
+            color: #fff;
+            margin: 0;
+        }
+
+        form {
+            margin: 1rem 0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4a5d7e;
+        }
+
+        .post, .event {
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .post img, .event img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .post-details, .event-details {
+            margin-bottom: 1rem;
+        }
+
+        .post-title, .event-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .post-description, .event-description {
+            margin: 0.5rem 0;
+        }
+
+        .post-actions, .event-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .post-actions form, .event-actions form {
+            display: inline;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #4a5d7e;
+        }
+
+        .auth-links {
+            margin-top: 1rem;
+        }
+
+        .event-title {
+            font-size: 1.8rem; /* Slightly larger font size for event titles */
+        }
+
+        .event-date, .event-location {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-description {
+            font-size: 1rem;
+        }
+
+        .event-id {
+            font-size: 1.1rem;
+            color: #e0e0e0; /* Light gray for better readability */
+        }
+  
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upcoming Events</h1>
+        
+        <form method="GET" action="{% url 'event-detail' %}">
+            <input type="text" name="q" placeholder="Search for events" value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if events %}
+            {% for event in events %}
+                <div class="event">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" alt="Event Image">
+                    {% endif %}
+                    <div class="event-details">
+                        <p class="event-title">Title: {{ event.title }}</p>
+                        <p class="event-date">Event Date: {{ event.start_time|date:"F j, Y" }} - {{ event.end_time|date:"F j, Y" }}</p>
+                        <p class="event-location">Location: {{ event.location }}</p>
+                        <p class="event-description">{{ event.description }}</p>
+                        <p class="event-id">Unique ID: {{ event.id }}</p>
+                        
+                    </div>
+                </div>
+            {% empty %}
+                <p>No events found.</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

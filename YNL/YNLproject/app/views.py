@@ -7,23 +7,71 @@ from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
 from django.contrib.auth import logout as auth_logout
 from app.models import Post
+from django.shortcuts import render, redirect
+from django.views import View
+from .models import Poll, Choice
+
+from django.views import View
+from django.shortcuts import render
+from app.models import Poll, Choice, Vote
+
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from .forms import PollForm, ChoiceForm
 from django.db.models import Q 
 from app.forms import StaffApplicationForm
 from django.contrib.auth.forms import UserCreationForm
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
+from .models import StaffApplication
+from .forms import StaffApplicationForm
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
+from .forms import ProfileForm
+from .models import Profile
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Profile
+from .forms import ProfileUpdateForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.utils.crypto import get_random_string
+from .forms import ForgotPasswordForm, OTPVerificationForm, ResetPasswordForm
+import random
+from django.contrib.auth.decorators import login_required
+from .models import Post
+from .forms import PostForm  
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import AuthenticationForm
 from django.urls import reverse_lazy
+from django.shortcuts import render
+from django.db.models import Count, Q
+from .models import Post
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import ContactMessage
+from .forms import ContactMessageForm
+
+from .forms import EventForm
+
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Event
+from .forms import EventForm
+
 
 # @login_required
 # def home(request):
 #     return render(request, 'app/index.html', {'user': request.user})
 
-from django.shortcuts import render
-from django.db.models import Count, Q
-from .models import Post
 
 def home(request):
     q = request.POST.get('q', '')
@@ -45,6 +93,23 @@ def home(request):
     context = {'post': post, 'query': q}
     return render(request, 'app/home.html', context)
 
+@login_required
+def create_post(request):
+    if not request.user.is_staff:  
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.created_by = request.user
+            post.save()
+            messages.success(request, 'Post created successfully!')
+            return redirect('home')  
+    else:
+        form = PostForm()
+
+    return render(request, 'app/create_post.html', {'form': form})
 
 def register(request):
     if request.method == 'POST':
@@ -59,7 +124,6 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'app/register.html', {'form': form})
 
-# Login View
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -73,13 +137,6 @@ def login(request):
     else:
         form = AuthenticationForm()
     return render(request, 'app/login.html', {'form': form})
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import Profile
-from .forms import ProfileUpdateForm
 
 @login_required
 def profile(request):
@@ -112,7 +169,6 @@ def update_profile_picture(request):
             return redirect('profile')
     return redirect('profile')
 
-
 @login_required
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -133,30 +189,28 @@ def dislike_post(request, post_id):
 
 from .models import StaffApplication
 
-@login_required
-def submit_staff_application(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        phone = request.POST.get('phone')
-        message = request.POST.get('message')
-        terms = request.POST.get('terms')
+# @login_required
+# def submit_staff_application(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         message = request.POST.get('message')
+#         terms = request.POST.get('terms')
 
-        if terms == 'agree':
-            StaffApplication.objects.create(
-                name=name,
-                email=email,
-                phone=phone,
-                message=message,
-                status='Pending'
-            )
-            return redirect('application_success')  # Redirect to a success page
-        else:
-            return redirect('application_error')  # Redirect to an error page
+#         if terms == 'agree':
+#             StaffApplication.objects.create(
+#                 name=name,
+#                 email=email,
+#                 phone=phone,
+#                 message=message,
+#                 status='Pending'
+#             )
+#             return redirect('application_success')  # Redirect to a success page
+#         else:
+#             return redirect('application_error')  # Redirect to an error page
 
-    return render(request, 'app/apply_for_admin.html')
-
-from .models import StaffApplication
+#     return render(request, 'app/apply_for_admin.html')
 
 @login_required
 def admin_staff_applications(request):
@@ -164,13 +218,12 @@ def admin_staff_applications(request):
         return redirect('home')  # Redirect non-admin users
 
     applications = StaffApplication.objects.all()
-    return render(request, 'app/admin_staff_application.html', {'applications': applications})
+    return render(request, 'admin/admin_staff_application.html', {'applications': applications})
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def approve_application(request, application_id):
     if not request.user.is_superuser:
-        return redirect('home')  # Redirect non-admin users
-
+        return redirect('home') 
     application = get_object_or_404(StaffApplication, id=application_id)
     user = User.objects.get(email=application.email)
 
@@ -187,22 +240,18 @@ def approve_application(request, application_id):
     return redirect('admin_staff_applications')
 
 def application_success(request):
-    return render(request, 'app/application_success.html')
+    return render(request, 'admin/application_success.html')
 
-def submit_staff_application(request):
-    if request.method == 'POST':
-        form = StaffApplicationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('application_success')
-    else:
-        form = StaffApplicationForm()
-    return render(request, 'app/apply_for_admin.html', {'form': form})
+# def submit_staff_application(request):
+#     if request.method == 'POST':
+#         form = StaffApplicationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('application_success')
+#     else:
+#         form = StaffApplicationForm()
+#     return render(request, 'app/apply_for_admin.html', {'form': form})
 
-# # app/views.py
-# from django.shortcuts import render, redirect, get_object_or_404
-# from .models import Poll, Feedback
-# from django.contrib.auth.decorators import login_required
 
 # @login_required
 # def feedback(request, poll_id):
@@ -220,19 +269,9 @@ def submit_staff_application(request):
 #         return redirect('home')  # Redirect to home page after submission
 
 #     return render(request, 'app/feedback.html', {'poll': poll})
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.utils.crypto import get_random_string
-from .forms import ForgotPasswordForm, OTPVerificationForm, ResetPasswordForm
-import random
+
 
 User = get_user_model()
-
-# Store OTPs in-memory for this example; in production, use a persistent storage
 otp_store = {}
 
 def forgot_password(request):
@@ -283,15 +322,10 @@ def reset_password(request):
             user = User.objects.get(email=email)
             user.set_password(new_password)
             user.save()
-            return redirect('login')  # Redirect to login page or some success page
+            return redirect('login')  #
     else:
         form = ResetPasswordForm()
     return render(request, 'app/reset_password.html', {'form': form})
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm
-from .models import Profile
 
 @login_required
 def create_profile(request):
@@ -301,16 +335,12 @@ def create_profile(request):
             profile = form.save(commit=False)
             profile.user = request.user
             profile.save()
-            return redirect('profile')  # Redirect to profile page or another page as needed
+            return redirect('profile')  
     else:
         form = ProfileForm()
 
     return render(request, 'app/create_profile.html', {'form': form})
 
-# views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import ContactMessage
-from .forms import ContactMessageForm
 
 def contact_us(request):
     if request.method == 'POST':
@@ -326,13 +356,16 @@ def contact_us(request):
 def contact_us_success(request):
     return render(request, 'app/contact_us_success.html')
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_contact_messages(request):
     messages = ContactMessage.objects.all()
-    return render(request, 'app/admin_contact_messages.html', {'messages': messages})
+    return render(request, 'admin/admin_contact_messages.html', {'messages': messages})
+
 
 def view_contact_message(request, message_id):
     message = get_object_or_404(ContactMessage, id=message_id)
-    return render(request, 'app/view_contact_message.html', {'message': message})
+    return render(request, 'admin/view_contact_message.html', {'message': message})
+
 
 def delete_contact_message(request, message_id):
     message = get_object_or_404(ContactMessage, id=message_id)
@@ -341,37 +374,31 @@ def delete_contact_message(request, message_id):
         return redirect('admin_contact_messages')
     return render(request, 'app/confirm_delete.html', {'message': message})
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib import messages
-from .models import StaffApplication
-from .forms import StaffApplicationForm
 
 @login_required
 def apply_for_staff(request):
-    # Check if the user already has an application
     if StaffApplication.objects.filter(user=request.user).exists():
         messages.info(request, 'You have already submitted an application or you are already a staff member.')
-        return redirect('home')  # Replace 'home' with your actual home view name
+        return redirect('home')  
     
     if request.method == 'POST':
         form = StaffApplicationForm(request.POST)
         if form.is_valid():
             application = form.save(commit=False)
             application.user = request.user
-            application.status = 'Pending'  # Set the default status
+            application.status = 'Pending' 
             application.save()
             messages.success(request, 'Your application has been submitted.')
-            return redirect('application_success')  # Ensure you have a URL named 'application_success'
+            return redirect('application_success') 
     else:
         form = StaffApplicationForm()
     
-    return render(request, 'app/apply_for_staff.html', {'form': form})
+    return render(request, 'app/apply_for_admin.html', {'form': form})
 
-@user_passes_test(lambda u: u.is_superuser)
+
 def admin_dashboard(request):
     applications = StaffApplication.objects.all()
-    return render(request, 'app/approved_staff.html', {'applications': applications})
+    return render(request, 'admin/approved_staff.html', {'applications': applications})
 
 @user_passes_test(lambda u: u.is_superuser)
 def approve_request(request, request_id):
@@ -390,21 +417,13 @@ def approve_request(request, request_id):
     messages.success(request, f'Request from {user.username} has been approved.')
     return redirect('make_staff')
 
-from django.views import View
-from django.shortcuts import render
-from app.models import Poll, Choice, Vote
-
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 @method_decorator(login_required, name='dispatch')
 class PollView(View):
 
     def get(self, request, poll_id):
         poll = Poll.objects.get(id=poll_id)
-        user_vote = Vote.objects.filter(user=request.user, poll=poll).first()  # Check if user has already voted
+        user_vote = Vote.objects.filter(user=request.user, poll=poll).first()  
         return render(
             request,
             template_name="app/poll.html",
@@ -421,7 +440,6 @@ class PollView(View):
         poll = Poll.objects.get(id=poll_id)
         choice = Choice.objects.get(id=choice_id)
 
-        # Check if the user has already voted in this poll
         if Vote.objects.filter(user=request.user, poll=poll).exists():
             return render(
                 request,
@@ -432,14 +450,13 @@ class PollView(View):
                 }
             )
 
-        # Create a new vote
+     
         Vote.objects.create(
-            user=request.user,  # Associate the vote with the current user
+            user=request.user,  
             poll=poll,
             choice=choice,
         )
 
-        # Prepare poll results for rendering
         poll_results = []
         for choice in poll.choices.all():
             voteCount = Vote.objects.filter(poll=poll, choice=choice).count()
@@ -455,12 +472,6 @@ class PollView(View):
             }
         )
 
-
-# app/views.py
-from django.shortcuts import render, redirect
-from django.views import View
-from .models import Poll, Choice
-from .forms import PollForm, ChoiceForm
 
 class PollCreateView(View):
     def get(self, request):
@@ -480,10 +491,9 @@ class PollCreateView(View):
         if poll_form.is_valid():
             poll = poll_form.save()
 
-            # Process choices
             choices = request.POST.getlist('choice_text')
             for choice_text in choices:
-                if choice_text.strip():  # Check if the choice is not empty
+                if choice_text.strip(): 
                     Choice.objects.create(poll=poll, text=choice_text.strip())
 
             return redirect('single_poll', poll_id=poll.id)
@@ -506,6 +516,46 @@ def reject_request(request, request_id):
     application.save()
     messages.success(request, 'Request has been rejected.')
     return redirect('make_staff')
+
+
+class EventListView(View):
+    def get(self, request):
+        q = request.GET.get('q', '')  
+        events = Event.objects.all()
+        
+        if q:
+            events = events.filter(
+                Q(title__icontains=q) | Q(description__icontains=q)
+            )
+        context = {
+            'events': events,
+            'query': q
+        }
+        return render(
+            request,
+            template_name="app/event.html",
+            context=context
+        )
+
+class EventCreateView(LoginRequiredMixin, CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'app/event_create.html'
+    success_url = reverse_lazy('application_success')  
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user  
+        return super().form_valid(form)
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        user = request.user
+        user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect('home')  # Redirect to the home page or any other page after deletion
+
+    return render(request, 'app/delete_account.html')
 
 
 @login_required

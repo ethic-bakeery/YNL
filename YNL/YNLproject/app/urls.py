@@ -1,11 +1,15 @@
 
 from django.urls import path
 from . import views
-from .views import submit_staff_application, admin_staff_applications, approve_application
+from .views import  admin_staff_applications, approve_application
 from .views import application_success
 from .views import forgot_password, otp_verification, reset_password,create_profile
 from .views import contact_us, contact_us_success, admin_contact_messages, view_contact_message, delete_contact_message
 from .views import apply_for_staff, admin_dashboard, approve_request, reject_request, PollCreateView
+from .views import EventCreateView, EventListView, create_post, delete_account
+
+
+
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -18,7 +22,7 @@ urlpatterns = [
     path('update-profile-picture/', views.update_profile_picture, name='update_profile_picture'),
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
     path('post/<int:post_id>/dislike/', views.dislike_post, name='dislike_post'),
-    path('apply/', submit_staff_application, name='submit_staff_application'),
+    # path('apply/', submit_staff_application, name='submit_staff_application'),
     path('terms/', views.terms_and_conditions, name='terms_and_conditions'),
     path('team/', views.our_team, name='our_team'),
     path('application-success/', application_success, name='application_success'),
@@ -28,7 +32,14 @@ urlpatterns = [
     path('contact/', views.contact_us, name='contact_us'),
     path('apply/', apply_for_staff, name='apply_for_staff'),
     path('poll/create/', PollCreateView.as_view(), name='create_poll'),
+
     path("poll/<int:poll_id>/", views.PollView.as_view(), name="single_poll"),
+    path('event/create/', EventCreateView.as_view(), name='create-event'),
+    path('events/', EventListView.as_view(), name='event-detail'),
+    path('create-post/', create_post, name='create-post'),
+    path('delete-account/', delete_account, name='delete_account'),
+
+
 
     # path('create-poll/', views.create_poll, name='create_poll'),
     # path('add-questions/<int:poll_id>/', views.add_questions, name='add_questions'),
@@ -43,9 +54,9 @@ urlpatterns = [
     path('admin/contact-messages/', views.admin_contact_messages, name='admin_contact_messages'),
     path('admin/contact-message/<int:message_id>/', view_contact_message, name='view_contact_message'),
     path('admin/contact-message/delete/<int:message_id>/', delete_contact_message, name='delete_contact_message'),
-    path('admin/applications/', admin_staff_applications, name='admin_staff_applications'),
+    # path('admin/applications/', admin_staff_applications, name='admin_staff_applications'),
     path('admin/approve/<int:application_id>/', approve_application, name='approve_application'),
-    path('admin/make_staff/', admin_dashboard, name='make_staff'),
+    path('admin/applications/', admin_dashboard, name='applications'),
     path('approve-request/<int:request_id>/', views.approve_request, name='approve_request'),
     path('reject-request/<int:request_id>/', views.reject_request, name='reject_request'),
     path('application-success/', views.application_success, name='application_success')

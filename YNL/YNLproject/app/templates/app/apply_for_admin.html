@@ -1,3 +1,7 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,75 +10,80 @@
     <title>admins application</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #040e27;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-        }
+    font-family: Arial, sans-serif;
+    background-color: #040e27;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    /* Adding padding to the top to account for the fixed navbar height */
+    padding-top: 70px; /* Adjust this value based on your navbar height */
+}
 
-        .container {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+.container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
 
-        .form-container {
-            background-color: #06112F;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+.form-container {
+    background-color: #06112F;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Add margin-top to push it below the navbar if necessary */
+    margin-top: 20px; /* Adjust this value based on how much space you need */
+}
 
-        h2 {
-            margin-bottom: 1rem;
-            color: #fff;
-        }
+h2 {
+    margin-bottom: 1rem;
+    color: #fff;
+}
 
-        input[type="text"], input[type="email"], textarea {
-            width: 100%;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            color: #000;
-        }
+input[type="text"], input[type="email"], textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #000;
+}
 
-        input[type="radio"] {
-            margin-right: 0.5rem;
-        }
+input[type="radio"] {
+    margin-right: 0.5rem;
+}
 
-        .btn {
-            padding: 0.8rem 1.5rem;
-            background-color: #1e2a49;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
+.btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #1e2a49;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
 
-        .btn:hover {
-            background-color: #4a5d7e;
-        }
+.btn:hover {
+    background-color: #4a5d7e;
+}
 
-        .link {
-            color: #4a5d7e;
-            text-decoration: none;
-        }
+.link {
+    color: #4a5d7e;
+    text-decoration: none;
+}
 
-        .link:hover {
-            text-decoration: underline;
-        }
+.link:hover {
+    text-decoration: underline;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="form-container">
             <h2>Apply for Administration</h2>
-            <form method="post" action="{% url 'submit_staff_application' %}">
+            <form method="post" action="{% url 'apply_for_staff' %}">
                 {% csrf_token %}
                 <input type="text" name="name" placeholder="Your Name" required>
                 <input type="email" name="email" placeholder="Your Email" required>
@@ -89,3 +98,5 @@
     </div>
 </body>
 </html>
+
+{% endblock %}
