@@ -14,16 +14,18 @@ class ProfileUpdateForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'rows': 3}),
         }
 
+# app/forms.py
+from django import forms
+from .models import Poll, Choice
 
-from .models import Feedback
-
-class FeedbackForm(forms.ModelForm):
+class PollForm(forms.ModelForm):
     class Meta:
-        model = Feedback
-        fields = ['comment']
-        widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Enter your feedback'}),
-        }
+        model = Poll
+        fields = ['name', 'description']
+
+class ChoiceForm(forms.Form):
+    choice_text = forms.CharField(label='Choice Text', max_length=255, widget=forms.TextInput(attrs={'placeholder': 'Enter choice'}))
+
 
 class StaffApplicationForm(forms.Form):
     email = forms.EmailField()
@@ -85,3 +87,10 @@ class StaffApplicationForm(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': 3}),
         }
+
+
+# class FeedbackForm(forms.ModelForm):
+#     class Meta:
+#         model = Feedback
+#         fields = ['comment']
+

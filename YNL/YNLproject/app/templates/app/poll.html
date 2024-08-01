@@ -1,0 +1,65 @@
+{% extends 'app/base.html' %}
+
+{% block body %}
+<!-- Display Success Message if Available -->
+{% if success_message %}
+<div class="alert alert-success">{{ success_message }}</div>
+{% endif %}
+
+<!-- Display Error Message if User Already Voted -->
+{% if error_message %}
+<div class="alert alert-danger">{{ error_message }}</div>
+{% endif %}
+
+<!-- Poll Details -->
+<h2>{{ poll.name }}</h2>
+<i><h6>{{ poll.description }}</h6></i>
+<hr class="my-4">
+
+<!-- Voting Form -->
+{% if user_vote %}
+    <p>You have already voted in this poll.</p>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+    {% for choice in poll.choices.all %}
+    <div class="form-check">
+      <input class="form-check-input" type="radio" name="choice_id" id="choice-{{ choice.id }}" value="{{ choice.id }}">
+      <label class="form-check-label" for="choice-{{ choice.id }}">
+        {{ choice.text }}
+      </label>
+    </div>
+    {% endfor %}
+    <hr class="my-4">
+    <button class="btn btn-outline-success">Vote</button>
+  </form>
+  
+{% endif %}
+
+<!-- Chart Display if Poll Results are Available -->
+{% if poll_results %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<div id="piechart"></div>
+<script type="text/javascript">
+  var poll_results = {{ poll_results|safe }};
+
+  // Load Google Charts
+  google.charts.load('current', { 'packages': ['corechart'] });
+  google.charts.setOnLoadCallback(drawChart);
+
+  // Draw the chart and set the chart values
+  function drawChart() {
+    poll_results.unshift(["Choice", "Vote Count"]);
+    var data = google.visualization.arrayToDataTable(poll_results);
+
+    // Optional; add a title and set the width and height of the chart
+    var options = { 'width': 550, 'height': 400 };
+
+    // Display the chart inside the <div> element with id="piechart"
+    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+    chart.draw(data, options);
+  }
+</script>
+{% endif %}
+
+{% endblock %}

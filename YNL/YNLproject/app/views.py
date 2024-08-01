@@ -376,8 +376,6 @@ def admin_dashboard(request):
 @user_passes_test(lambda u: u.is_superuser)
 def approve_request(request, request_id):
     application = get_object_or_404(StaffApplication, id=request_id)
-    
-    # Ensure application has an associated user
     if not application.user:
         messages.error(request, 'Application user not found.')
         return redirect('make_staff')
@@ -391,6 +389,115 @@ def approve_request(request, request_id):
     
     messages.success(request, f'Request from {user.username} has been approved.')
     return redirect('make_staff')
+
+from django.views import View
+from django.shortcuts import render
+from app.models import Poll, Choice, Vote
+
+from django.shortcuts import render, redirect
+from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+@method_decorator(login_required, name='dispatch')
+class PollView(View):
+
+    def get(self, request, poll_id):
+        poll = Poll.objects.get(id=poll_id)
+        user_vote = Vote.objects.filter(user=request.user, poll=poll).first()  # Check if user has already voted
+        return render(
+            request,
+            template_name="app/poll.html",
+            context={
+                "poll": poll,
+                "user_vote": user_vote,
+            }
+        )
+
+    def post(self, request, poll_id):
+        requestData = request.POST
+        choice_id = requestData.get('choice_id')
+
+        poll = Poll.objects.get(id=poll_id)
+        choice = Choice.objects.get(id=choice_id)
+
+        # Check if the user has already voted in this poll
+        if Vote.objects.filter(user=request.user, poll=poll).exists():
+            return render(
+                request,
+                template_name="app/poll.html",
+                context={
+                    "poll": poll,
+                    "error_message": "You have already voted in this poll.",
+                }
+            )
+
+        # Create a new vote
+        Vote.objects.create(
+            user=request.user,  # Associate the vote with the current user
+            poll=poll,
+            choice=choice,
+        )
+
+        # Prepare poll results for rendering
+        poll_results = []
+        for choice in poll.choices.all():
+            voteCount = Vote.objects.filter(poll=poll, choice=choice).count()
+            poll_results.append([choice.text, voteCount])
+
+        return render(
+            request,
+            template_name="app/poll.html",
+            context={
+                "poll": poll,
+                "success_message": "Voted Successfully",
+                "poll_results": poll_results,
+            }
+        )
+
+
+# app/views.py
+from django.shortcuts import render, redirect
+from django.views import View
+from .models import Poll, Choice
+from .forms import PollForm, ChoiceForm
+
+class PollCreateView(View):
+    def get(self, request):
+        poll_form = PollForm()
+        choice_form = ChoiceForm()
+        return render(
+            request,
+            template_name="app/poll_create.html",
+            context={
+                'poll_form': poll_form,
+                'choice_form': choice_form
+            }
+        )
+
+    def post(self, request):
+        poll_form = PollForm(request.POST)
+        if poll_form.is_valid():
+            poll = poll_form.save()
+
+            # Process choices
+            choices = request.POST.getlist('choice_text')
+            for choice_text in choices:
+                if choice_text.strip():  # Check if the choice is not empty
+                    Choice.objects.create(poll=poll, text=choice_text.strip())
+
+            return redirect('single_poll', poll_id=poll.id)
+        
+        choice_form = ChoiceForm()
+        return render(
+            request,
+            template_name="app/poll_create.html",
+            context={
+                'poll_form': poll_form,
+                'choice_form': choice_form
+            }
+        )
+
 
 @user_passes_test(lambda u: u.is_superuser)
 def reject_request(request, request_id):

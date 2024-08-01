@@ -5,7 +5,7 @@ from .views import submit_staff_application, admin_staff_applications, approve_a
 from .views import application_success
 from .views import forgot_password, otp_verification, reset_password,create_profile
 from .views import contact_us, contact_us_success, admin_contact_messages, view_contact_message, delete_contact_message
-from .views import apply_for_staff, admin_dashboard, approve_request, reject_request
+from .views import apply_for_staff, admin_dashboard, approve_request, reject_request, PollCreateView
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -27,6 +27,15 @@ urlpatterns = [
     path('reset-password/', reset_password, name='reset_password'),
     path('contact/', views.contact_us, name='contact_us'),
     path('apply/', apply_for_staff, name='apply_for_staff'),
+    path('poll/create/', PollCreateView.as_view(), name='create_poll'),
+    path("poll/<int:poll_id>/", views.PollView.as_view(), name="single_poll"),
+
+    # path('create-poll/', views.create_poll, name='create_poll'),
+    # path('add-questions/<int:poll_id>/', views.add_questions, name='add_questions'),
+    # path('poll/<int:poll_id>/', views.poll_detail, name='poll_detail'),
+    # path('manage-polls/', views.manage_polls, name='manage_polls'),
+    # path('all-polls/', views.all_polls, name='all_polls'),
+    # path('submit-feedback/<int:poll_id>/', views.submit_feedback, name='submit_feedback'),
     
     # ADMIN PAGES 
    

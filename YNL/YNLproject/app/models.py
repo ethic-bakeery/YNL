@@ -44,39 +44,49 @@ class StaffApplication(models.Model):
         super().save(*args, **kwargs)
 
     
+
+from django.contrib.auth.models import User
+from django.utils import timezone
+
 class Poll(models.Model):
-    title = models.CharField(max_length=255, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    image = models.ImageField(upload_to='polls/media/uploads/images', blank=True, null=True)
+    name = models.CharField(max_length=50, blank=False)
+    description = models.TextField(max_length=1000, blank=True)
 
     def __str__(self):
-        return self.title
-
-class Question(models.Model):
-    poll = models.ForeignKey(Poll, related_name='questions', on_delete=models.CASCADE)
-    text = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return self.text
+        return self.name
 
 class Choice(models.Model):
-    question = models.ForeignKey(Question, related_name='choices', on_delete=models.CASCADE)
-    text = models.CharField(max_length=255, blank=True, null=True)
-    votes = models.IntegerField(default=0)
+    poll = models.ForeignKey(Poll, related_name='choices', on_delete=models.CASCADE) 
+    text = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.text
 
-class Feedback(models.Model):
-    poll = models.ForeignKey(Poll, related_name='feedbacks', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.TextField(blank=True, null=True)
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)  
+    poll = models.ForeignKey(
+        Poll, on_delete=models.SET_NULL, related_name="votes", null=True, blank=True)
+    choice = models.ForeignKey(
+        Choice, on_delete=models.SET_NULL, related_name="votes", null=True, blank=True)
+    timestamp = models.DateTimeField(default=timezone.now())
+
+    class Meta:
+        unique_together = ('user', 'poll')  # Ensure a user can vote only once per poll
 
     def __str__(self):
-        return f"Feedback by {self.user.email} on {self.poll.title}"
+        poll_name = self.poll.name if self.poll else 'No Poll'
+        choice_name = self.choice.text if self.choice else 'No Choice'
+        return f"{poll_name} - {choice_name}"
+
+
+# class Feedback(models.Model):
+#     poll = models.ForeignKey(Poll, related_name='feedbacks', on_delete=models.CASCADE)
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     comment = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return f"Feedback by {self.user.email} on {self.poll.title}"
 
 class Post(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)

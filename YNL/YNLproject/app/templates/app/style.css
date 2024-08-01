@@ -1,0 +1,104 @@
+/* app/style.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #040e27;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background-color: #1e2a49;
+    border-radius: 8px;
+}
+
+h2, h3, h4 {
+    color: #fff;
+}
+
+.poll {
+    border: 1px solid #06112F;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #0a153e;
+}
+
+.poll h3 {
+    margin-top: 0;
+}
+
+.poll p {
+    margin: 0.5rem 0;
+}
+
+.feedback-section {
+    margin-top: 1rem;
+}
+
+.feedback-section h4 {
+    color: #4a5d7e;
+}
+
+.feedback-section .btn {
+    padding: 0.5rem 1rem;
+    background-color: #1e2a49;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.feedback-section .btn:hover {
+    background-color: #4a5d7e;
+}
+
+form {
+    margin-top: 1rem;
+}
+
+form button[type="submit"] {
+    padding: 0.5rem 1rem;
+    background-color: #1e2a49;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+form button[type="submit"]:hover {
+    background-color: #4a5d7e;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 1rem;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #06112F;
+}
+
+tr:nth-child(even) {
+    background-color: #1e2a49;
+}
+
+a {
+    color: #4a5d7e;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

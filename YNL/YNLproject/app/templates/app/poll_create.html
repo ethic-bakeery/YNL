@@ -1,0 +1,81 @@
+<!-- app/templates/app/poll_create.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Poll</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 3rem auto; /* Adjust margin to pull container down */
+            background-color: #1e2a49;
+            border-radius: 8px;
+        }
+        h2 {
+            color: #fff;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input, textarea {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #000;
+        }
+        button {
+            padding: 0.5rem;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Poll</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ poll_form.as_p }}
+            <div id="choices">
+                <div class="choice">
+                    {{ choice_form.as_p }}
+                </div>
+            </div>
+            <button type="button" onclick="addChoice()">Add Another Choice</button>
+            <hr class="my-4">
+            <button type="submit">Create Poll</button>
+        </form>
+
+        <script type="text/javascript">
+            function addChoice() {
+                const choicesDiv = document.getElementById('choices');
+                const newChoiceHtml = `
+                    <div class="choice">
+                        <input type="text" name="choice_text" placeholder="Enter choice" required>
+                    </div>`;
+                choicesDiv.insertAdjacentHTML('beforeend', newChoiceHtml);
+            }
+        </script>
+    </div>
+</body>
+</html>
