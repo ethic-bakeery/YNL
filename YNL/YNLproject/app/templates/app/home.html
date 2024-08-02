@@ -1,3 +1,7 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +33,14 @@
             margin: 1rem 0;
         }
 
-        input[type="text"] {
+        input[type="text"], textarea {
             width: 80%;
             padding: 0.8rem;
             border-radius: 4px;
             border: 1px solid #ddd;
             margin-right: 0.5rem;
+            background-color: #fff;
+            color: #000;
         }
 
         button {
@@ -106,20 +112,50 @@
         .auth-links {
             margin-top: 1rem;
         }
+
+        .comments-section {
+            margin-top: 1rem;
+        }
+
+        .comments-list {
+            margin-top: 1rem;
+            padding: 0;
+            list-style: none;
+        }
+
+        .comment {
+            background-color: #1e2a49;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-comments-btn {
+            background-color: #1e2a49;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+
+        .toggle-comments-btn:hover {
+            background-color: #4a5d7e;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>Home Page</h3>
-        <h4>Dear {{ user.username }}, welcome to the site</h4>
-        
+        <h1>Posts</h1>
+
         <form method="POST" action="{% url 'home' %}">
             {% csrf_token %}
             <input type="text" name="q" placeholder="Search for restaurant" value="{{ query }}">
             <button type="submit">Search</button>
         </form>
 
-        {% if post %}
+        {% if user.is_authenticated %}
             {% for ps in post %}
                 <div class="post">
                     {% if ps.image %}
@@ -138,11 +174,41 @@
                                 <button type="submit">Dislike</button>
                             </form>
                         </div>
+
+                        <!-- Comment form -->
+                        <div class="comment-form">
+                            <form method="post" action="{% url 'add_comment' ps.id %}">
+                                {% csrf_token %}
+                                <textarea name="content" placeholder="Write your comment..." required></textarea>
+                                <button type="submit">Submit Comment</button>
+                            </form>
+                        </div>
+
+                        <!-- Comments section -->
+                        {% if ps.comments.exists %}
+                            <div class="comments-section">
+                                <button class="toggle-comments-btn">Show Comments</button>
+                                <div class="comments-list" style="display: none;">
+                                    {% for comment in ps.comments.all %}
+                                        <div class="comment">
+                                            <p><strong>{{ comment.user.username }}</strong> on {{ comment.created_at }}</p>
+                                            <p>{{ comment.content }}</p>
+                                            {% if comment.user == user %}
+                                                <form method="post" action="{% url 'delete_comment' comment.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn">Delete Comment</button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
-        {% elif query %}
-            <p>No post found.</p>
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">login</a> to view and post comments.</p>
         {% endif %}
 
         {% if user.is_authenticated %}
@@ -151,5 +217,26 @@
             </div>
         {% endif %}
     </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.toggle-comments-btn');
+
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentsList = this.nextElementSibling;
+                    if (commentsList.style.display === 'none' || commentsList.style.display === '') {
+                        commentsList.style.display = 'block';
+                        this.textContent = 'Hide Comments';
+                    } else {
+                        commentsList.style.display = 'none';
+                        this.textContent = 'Show Comments';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
+
+{% endblock %}

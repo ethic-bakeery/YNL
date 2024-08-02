@@ -6,7 +6,7 @@ from .views import application_success
 from .views import forgot_password, otp_verification, reset_password,create_profile
 from .views import contact_us, contact_us_success, admin_contact_messages, view_contact_message, delete_contact_message
 from .views import apply_for_staff, admin_dashboard, approve_request, reject_request, PollCreateView
-from .views import EventCreateView, EventListView, create_post, delete_account
+from .views import EventCreateView, EventListView, create_post, delete_account,add_comment, delete_comment
 
 
 
@@ -14,6 +14,7 @@ from .views import EventCreateView, EventListView, create_post, delete_account
 urlpatterns = [
     path('', views.home, name='home'),
     path('register/', views.register, name='register'),
+    path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
     path('create_profile/', create_profile, name='create_profile'),
     path('login/', views.login, name='login'),
     path('profile/', views.profile, name='profile'),
@@ -31,23 +32,19 @@ urlpatterns = [
     path('reset-password/', reset_password, name='reset_password'),
     path('contact/', views.contact_us, name='contact_us'),
     path('apply/', apply_for_staff, name='apply_for_staff'),
+    path('polls/', views.PollListView.as_view(), name='poll_list'),
+    path("poll/<int:poll_id>/", views.PollView.as_view(), name="single_poll"),
+    path('events/', EventListView.as_view(), name='event-detail'),
+    
+    path('delete-account/', delete_account, name='delete_account'),
+    path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
+    path('comment/<int:comment_id>/delete/', delete_comment, name='delete_comment'),
+
+    #STAFF PAGES
+    path('create-post/', create_post, name='create-post'),
+    path('event/create/', EventCreateView.as_view(), name='create-event'),
     path('poll/create/', PollCreateView.as_view(), name='create_poll'),
 
-    path("poll/<int:poll_id>/", views.PollView.as_view(), name="single_poll"),
-    path('event/create/', EventCreateView.as_view(), name='create-event'),
-    path('events/', EventListView.as_view(), name='event-detail'),
-    path('create-post/', create_post, name='create-post'),
-    path('delete-account/', delete_account, name='delete_account'),
-
-
-
-    # path('create-poll/', views.create_poll, name='create_poll'),
-    # path('add-questions/<int:poll_id>/', views.add_questions, name='add_questions'),
-    # path('poll/<int:poll_id>/', views.poll_detail, name='poll_detail'),
-    # path('manage-polls/', views.manage_polls, name='manage_polls'),
-    # path('all-polls/', views.all_polls, name='all_polls'),
-    # path('submit-feedback/<int:poll_id>/', views.submit_feedback, name='submit_feedback'),
-    
     # ADMIN PAGES 
    
     path('contact/success/', contact_us_success, name='contact_us_success'),

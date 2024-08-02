@@ -111,6 +111,28 @@ def create_post(request):
 
     return render(request, 'app/create_post.html', {'form': form})
 
+from .models import Post, Comment
+from .forms import CommentForm
+
+@login_required
+def add_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+    return redirect('home')  
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.method == 'POST' and comment.user == request.user:
+        comment.delete()
+    return redirect('home')
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -505,6 +527,18 @@ class PollCreateView(View):
             context={
                 'poll_form': poll_form,
                 'choice_form': choice_form
+            }
+        )
+
+@method_decorator(login_required, name='dispatch')
+class PollListView(View):
+    def get(self, request):
+        polls = Poll.objects.all()
+        return render(
+            request,
+            template_name="app/poll_list.html",
+            context={
+                "polls": polls
             }
         )
 

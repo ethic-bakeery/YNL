@@ -1,0 +1,78 @@
+
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poll List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px; /* Adjust this value to the height of your fixed navbar */
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h3 {
+            color: #fff;
+            margin: 0;
+        }
+
+        .poll-item {
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .poll-item a {
+            color: #1e2a49;
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .poll-item a:hover {
+            text-decoration: underline;
+        }
+
+        .no-polls {
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Available Polls</h3>
+        {% if polls %}
+            {% for poll in polls %}
+                <div class="poll-item">
+                    <a href="{% url 'single_poll' poll.id %}">{{ poll.name }}</a>
+                    <p>{{ poll.description }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-polls">
+                No polls created.
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

@@ -1,4 +1,3 @@
-
 {% extends 'app/user_navbar.html' %}
 
 {% block content %}
@@ -18,40 +17,103 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             padding: 2rem;
             max-width: 600px;
-            margin: 3rem auto; /* Adjust margin to pull container down */
+            margin: 4rem auto; /* Adjust margin to pull container down */
             background-color: #1e2a49;
             border-radius: 8px;
+            margin-top: 100;
         }
+
         h2 {
             color: #fff;
             text-align: center;
+            margin-bottom: 1.5rem;
         }
+
         form {
             display: flex;
             flex-direction: column;
         }
-        input, textarea {
-            margin-bottom: 1rem;
-            padding: 0.5rem;
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #ddd;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
             background-color: #fff;
             color: #000;
         }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
         button {
-            padding: 0.5rem;
+            padding: 0.75rem;
             background-color: #28a745;
             border: none;
             border-radius: 4px;
             color: #fff;
             font-weight: bold;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
+
         button:hover {
             background-color: #218838;
+        }
+
+        .add-choice-button {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-choice-button:hover {
+            background-color: #0056b3;
+        }
+
+        .choice {
+            margin-top: 0.5rem;
+        }
+
+        .choice input {
+            width: calc(100% - 1.5rem);
+            margin-right: 0.5rem;
+        }
+
+        .choice .remove-choice {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .choice .remove-choice:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -60,13 +122,15 @@
         <h2>Create a New Poll</h2>
         <form method="post">
             {% csrf_token %}
-            {{ poll_form.as_p }}
+            <div class="form-group">
+                {{ poll_form.as_p }}
+            </div>
             <div id="choices">
-                <div class="choice">
+                <div class="form-group choice">
                     {{ choice_form.as_p }}
                 </div>
             </div>
-            <button type="button" onclick="addChoice()">Add Another Choice</button>
+            <button type="button" class="add-choice-button" onclick="addChoice()">Add Another Choice</button>
             <hr class="my-4">
             <button type="submit">Create Poll</button>
         </form>
@@ -75,10 +139,15 @@
             function addChoice() {
                 const choicesDiv = document.getElementById('choices');
                 const newChoiceHtml = `
-                    <div class="choice">
+                    <div class="form-group choice">
                         <input type="text" name="choice_text" placeholder="Enter choice" required>
+                        <button type="button" class="remove-choice" onclick="removeChoice(this)">Remove</button>
                     </div>`;
                 choicesDiv.insertAdjacentHTML('beforeend', newChoiceHtml);
+            }
+
+            function removeChoice(button) {
+                button.parentElement.remove();
             }
         </script>
     </div>

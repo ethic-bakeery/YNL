@@ -3,7 +3,15 @@ from .models import Profile
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import PasswordResetForm
+from .models import Comment
+from .models import Poll, Choice
+from .models import Event
+from .models import Post
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -14,11 +22,6 @@ class ProfileUpdateForm(forms.ModelForm):
             'bio': forms.Textarea(attrs={'rows': 3}),
         }
 
-from .models import Poll, Choice
-
-from .models import Event
-
-from .models import Post
 
 class PostForm(forms.ModelForm):
     class Meta:
