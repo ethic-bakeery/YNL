@@ -112,17 +112,17 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-class ChatMessage(models.Model):
-    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
-    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
-    message = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='chat_images/', blank=True, null=True)
-    video = models.FileField(upload_to='chat_videos/', blank=True, null=True)
-    voice = models.FileField(upload_to='chat_voices/', blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+# class ChatMessage(models.Model):
+#     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+#     recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+#     message = models.TextField(blank=True, null=True)
+#     image = models.ImageField(upload_to='chat_images/', blank=True, null=True)
+#     video = models.FileField(upload_to='chat_videos/', blank=True, null=True)
+#     voice = models.FileField(upload_to='chat_voices/', blank=True, null=True)
+#     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"Message from {self.sender.email} to {self.recipient.email} at {self.timestamp}"
+#     def __str__(self):
+#         return f"Message from {self.sender.email} to {self.recipient.email} at {self.timestamp}"
 
 class LiveChatSession(models.Model):
     participants = models.ManyToManyField(User, related_name='live_chat_sessions')

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a User to Chat With</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .user-list-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-item {
+            background-color: #1e2a49; /* Darker button background */
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-item:hover {
+            background-color: #4a5d7e; /* Hover effect */
+        }
+
+        .user-item span {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .user-item i {
+            color: #4a5d7e; /* Icon color */
+        }
+
+        @media (max-width: 768px) {
+            .user-list-container {
+                padding: 1rem;
+            }
+
+            .user-item {
+                padding: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-list-container">
+        <h1>Select a User to Chat With</h1>
+        <ul>
+            {% for user in users %}
+            <li class="user-item" onclick="startChat('{{ user.username }}')">
+                <span>{{ user.username }}</span>
+                <i class="fas fa-comment-dots"></i>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        function startChat(username) {
+            window.location.href = "{% url 'chat_page' 'username' %}".replace('username', username);
+        }
+    </script>
+</body>
+</html>

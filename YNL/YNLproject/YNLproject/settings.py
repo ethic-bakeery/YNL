@@ -29,9 +29,15 @@ ALLOWED_HOSTS = []
 
 
 
-# Application definition
+ASGI_APPLICATION = 'YNLproject.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'chat',
+    'channels',
+  
 
 ]
 
@@ -92,11 +101,15 @@ DATABASES = {
     }
 }
 
+
 AUTH_USER_MODEL = 'auth.User'
 
 import os 
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 

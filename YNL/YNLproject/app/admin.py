@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 from .models import (
     Profile, Poll, ContactMessage, GroupJoinRequest, Vote, StaffApplication,
-    Choice, Post, Event, ChatMessage, LiveChatSession, Group, GroupMembership, GroupMessage
+    Choice, Post, Event, LiveChatSession, Group, GroupMembership, GroupMessage
 )
 
 # Unregister the default UserAdmin
@@ -48,7 +48,7 @@ class VoteAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Event, EventAdmin)
-admin.site.register(ChatMessage, ChatMessageAdmin)
+# admin.site.register(ChatMessage, ChatMessageAdmin)
 admin.site.register(LiveChatSession, LiveChatSessionAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(GroupMembership, GroupMembershipAdmin)

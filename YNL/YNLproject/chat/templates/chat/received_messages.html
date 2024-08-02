@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Received Messages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+        }
+
+        .messages-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            background-color: #1e2a49; /* Darker message background */
+        }
+
+        .message.sender {
+            background-color: #4a5d7e; /* Lighter background for sender messages */
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.receiver {
+            background-color: #0f1c43; /* Lighter background for receiver messages */
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .message-content {
+            margin-bottom: 5px;
+        }
+
+        .message-timestamp {
+            font-size: 0.8em;
+            color: #888;
+        }
+
+        .message-actions {
+            margin-top: 10px;
+        }
+
+        .message-actions a {
+            text-decoration: none;
+            color: #4a5d7e; /* Link color */
+            font-weight: bold;
+        }
+
+        .message-actions a:hover {
+            text-decoration: underline;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        audio {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="messages-container">
+        <h1>Received Messages</h1>
+        {% for message in messages %}
+            <div class="message {% if message.sender == user %}sender{% else %}receiver{% endif %}">
+                <div class="message-content">
+                    <p><strong>{{ message.sender.username }}:</strong> {{ message.message }}</p>
+                    {% if message.image %}
+                        <img src="{{ message.image.url }}" alt="Image">
+                    {% endif %}
+                    {% if message.voice %}
+                        <audio controls>
+                            <source src="{{ message.voice.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% endif %}
+                </div>
+                <div class="message-timestamp">{{ message.timestamp }}</div>
+                <div class="message-actions">
+                    <a href="{% url 'chat_page' message.sender.username %}">Reply</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No messages found.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
