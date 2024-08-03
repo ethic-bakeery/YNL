@@ -1,3 +1,6 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,14 +14,56 @@
             margin: 0;
             padding: 0;
             background-color: #040e27; /* Darker background */
+            padding-top: 18px; /* Adjust based on the height of your navbar */
         }
 
         #chat-container {
             display: flex;
-            flex-direction: column;
-            height: 100vh;
+            height: calc(100vh - 130px); /* Adjust height to account for navbar */
             width: 100%;
-            background-color: #06112F; /* Darker background for chat container */
+            margin-top: 70px; /* Adjust this value if needed */
+        }
+
+        .sidebar {
+            width: 250px; /* Adjust width as needed */
+            background-color: #06112F; /* Darker background for sidebar */
+            color: #fff;
+            padding: 10px;
+            overflow-y: auto;
+            border-right: 1px solid #075e54;
+        }
+
+        .sidebar h2 {
+            margin-top: 0;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #075e54; /* Darker background for user profiles */
+            border-radius: 8px;
+        }
+
+        .user-profile img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-profile p {
+            margin: 0;
+            color: #fff;
+        }
+
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #06112F; /* Darker background for chat area */
+            padding: 10px; /* Add padding if needed */
         }
 
         .chat-header {
@@ -100,13 +145,13 @@
         }
 
         .chat-message.right {
-            background-color: #d1ffd1; /* Light green for user messages */
+            background-color: #003300; /* Light green for user messages */
             margin-left: auto;
             align-items: flex-end;
         }
 
         .chat-message.left {
-            background-color: #f1f1f1; /* Light grey for recipient messages */
+            background-color: #003366; /* Light grey for recipient messages */
             margin-right: auto;
             align-items: flex-start;
         }
@@ -151,35 +196,112 @@
 </head>
 <body>
     <div id="chat-container">
-        <div class="chat-header">
-            <h1>Chatting with {{ recipient.username }}</h1>
-        </div>
-        <div id="id_chat_item_container">
-            {% for message in messages %}
-                <div class="chat-message {% if message.sender == user %}right{% else %}left{% endif %}">
-                    <div class="message-content">
-                        <div class="message-text">{{ message.message }}</div>
-                        {% if message.image %}
-                            <img src="{{ message.image.url }}" alt="Image">
-                        {% endif %}
-                        {% if message.voice %}
-                            <audio controls>
-                                <source src="{{ message.voice.url }}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        {% endif %}
-                        <div class="message-timestamp">{{ message.timestamp }}</div>
-                    </div>
+        <div class="sidebar">
+            <h2>Contacts</h2>
+            {% for user in users %}
+                <div class="user-profile">
+                    <img src="{{ user.profile_picture.url }}" alt="Profile Picture">
+                    <p>{{ user.username }}</p>
                 </div>
             {% endfor %}
         </div>
-        <form method="post" enctype="multipart/form-data" class="chat-input-container">
-            {% csrf_token %}
-            <input type="text" id="id_message_send_input" name="message" placeholder="Type your message..." />
-            <!-- <input type="file" name="image" accept="image/*" />
-            <input type="file" name="voice" accept="audio/*" /> -->
-            <button type="submit" id="id_message_send_button">Send</button>
-        </form>
+        <div class="chat-area">
+            <div class="chat-header">
+                <h1>Chatting with {{ recipient.username }}</h1>
+            </div>
+            <div id="id_chat_item_container">
+                {% for message in messages %}
+                    <div class="chat-message {% if message.sender == user %}right{% else %}left{% endif %}">
+                        <div class="message-content">
+                            <div class="message-text">{{ message.message }}</div>
+                            {% if message.image %}
+                                <img src="{{ message.image.url }}" alt="Image">
+                            {% endif %}
+                            {% if message.voice %}
+                                <audio controls>
+                                    <source src="{{ message.voice.url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            {% endif %}
+                            <div class="message-timestamp">{{ message.timestamp }}</div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <form id="chat-form" method="post" enctype="multipart/form-data" class="chat-input-container">
+                {% csrf_token %}
+                <input type="text" id="id_message_send_input" name="message" placeholder="Type your message..." />
+                <!-- <input type="file" name="image" accept="image/*" />
+                <input type="file" name="voice" accept="audio/*" /> -->
+                <button type="submit" id="id_message_send_button">Send</button>
+            </form>
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatContainer = document.getElementById('id_chat_item_container');
+            const chatForm = document.getElementById('chat-form');
+            const messageInput = document.getElementById('id_message_send_input');
+
+            // Function to scroll to the bottom of the chat
+            function scrollToBottom() {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+
+            // Send a message via AJAX
+            chatForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form from submitting normally
+                
+                const formData = new FormData(chatForm);
+                fetch('{% url "chat:chat_page" username=recipient.username %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Clear the input field
+                        messageInput.value = '';
+                        // Reload chat messages
+                        loadMessages();
+                    } else {
+                        console.error('Failed to send message:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+
+            // Load chat messages via AJAX
+            function loadMessages() {
+                fetch('{% url "chat:load_messages" username=recipient.username %}', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    chatContainer.innerHTML = data.messages_html;
+                    scrollToBottom();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // Poll for new messages every 5 seconds
+            setInterval(loadMessages, 5000);
+
+            // Initial load
+            loadMessages();
+        });
+    </script>
 </body>
 </html>
+{% endblock %}

@@ -1,3 +1,8 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,8 +94,10 @@
 
     <script>
         function startChat(username) {
-            window.location.href = "{% url 'chat_page' 'username' %}".replace('username', username);
+            window.location.href = "{% url 'chat:chat_page' 'username' %}".replace('username', username);
         }
     </script>
 </body>
 </html>
+
+{% endblock %}

@@ -33,6 +33,56 @@ def anonymous(request, *args, **kwargs):
     context = {}
     return render(request, "chat/anonymous/temp.html", context)
 
+from django.http import JsonResponse
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+
+@login_required
+def load_messages(request, username):
+    user = request.user
+    try:
+        recipient = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
+
+    messages = ChatMessage.objects.filter(
+        sender__in=[user, recipient],
+        recipient__in=[user, recipient]
+    ).order_by('timestamp')
+
+    messages_html = render_to_string('chat/messages.html', {
+        'messages': messages,
+        'user': user
+    })
+
+    return JsonResponse({"messages_html": messages_html})
+
+@login_required
+def fetch_messages(request, username):
+    user = request.user
+    try:
+        recipient = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found"}, status=404)
+
+    messages = ChatMessage.objects.filter(
+        sender__in=[user, recipient],
+        recipient__in=[user, recipient]
+    ).order_by('timestamp')
+
+    message_data = [
+        {
+            "sender": message.sender.username,
+            "recipient": message.recipient.username,
+            "message": message.message,
+            "image": message.image.url if message.image else None,
+            "voice": message.voice.url if message.voice else None,
+            "timestamp": message.timestamp.isoformat()
+        }
+        for message in messages
+    ]
+    return JsonResponse(message_data, safe=False)
+
 @login_required
 def chat_page(request, username):
     user = request.user
@@ -52,7 +102,7 @@ def chat_page(request, username):
             image=image,
             voice=voice
         )
-        return redirect('chat_page', username=username)
+        return redirect('chat:chat_page', username=username)
 
     messages = ChatMessage.objects.filter(
         sender__in=[user, recipient],
@@ -95,31 +145,31 @@ def received_messages(request):
     return render(request, 'chat/received_messages.html', context)
 
 
-@login_required
-def chat_page(request, username):
-    user = request.user
-    recipient = get_object_or_404(User, username=username)
+# @login_required
+# def chat_page(request, username):
+#     user = request.user
+#     recipient = get_object_or_404(User, username=username)
     
-    if request.method == 'POST':
-        message_content = request.POST.get('message')
-        image = request.FILES.get('image')
-        voice = request.FILES.get('voice')
-        ChatMessage.objects.create(
-            sender=user,
-            recipient=recipient,
-            message=message_content,
-            image=image,
-            voice=voice
-        )
-        return redirect('chat_page', username=username)
+#     if request.method == 'POST':
+#         message_content = request.POST.get('message')
+#         image = request.FILES.get('image')
+#         voice = request.FILES.get('voice')
+#         ChatMessage.objects.create(
+#             sender=user,
+#             recipient=recipient,
+#             message=message_content,
+#             image=image,
+#             voice=voice
+#         )
+#         return redirect('chat_page', username=username)
 
-    messages = ChatMessage.objects.filter(
-        sender__in=[user, recipient],
-        recipient__in=[user, recipient]
-    ).order_by('timestamp')
+#     messages = ChatMessage.objects.filter(
+#         sender__in=[user, recipient],
+#         recipient__in=[user, recipient]
+#     ).order_by('timestamp')
 
-    context = {
-        'recipient': recipient,
-        'messages': messages
-    }
-    return render(request, 'chat/chat_page.html', context)
+#     context = {
+#         'recipient': recipient,
+#         'messages': messages
+#     }
+#     return render(request, 'chat/chat_page.html', context)

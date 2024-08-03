@@ -12,30 +12,34 @@ from .views import EventCreateView, EventListView, create_post, delete_account,a
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    #unathenticated user
+
+    path('', views.index, name='index'),
     path('register/', views.register, name='register'),
-    path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
-    path('create_profile/', create_profile, name='create_profile'),
     path('login/', views.login, name='login'),
-    path('profile/', views.profile, name='profile'),
-    path('update_profile/', views.update_profile, name='update_profile'),
-    path('logout/',views.logout, name="logout"),
-    path('update-profile-picture/', views.update_profile_picture, name='update_profile_picture'),
-    path('post/<int:post_id>/like/', views.like_post, name='like_post'),
-    path('post/<int:post_id>/dislike/', views.dislike_post, name='dislike_post'),
-    # path('apply/', submit_staff_application, name='submit_staff_application'),
     path('terms/', views.terms_and_conditions, name='terms_and_conditions'),
     path('team/', views.our_team, name='our_team'),
-    path('application-success/', application_success, name='application_success'),
     path('forgot-password/', forgot_password, name='forgot_password'),
     path('otp-verification/', otp_verification, name='otp_verification'),
     path('reset-password/', reset_password, name='reset_password'),
     path('contact/', views.contact_us, name='contact_us'),
+    path('contact/success/', contact_us_success, name='contact_us_success'),
+
+    #uthyenticated user
+    path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
+    path('create_profile/', create_profile, name='create_profile'),
+    path('home/', views.home, name='home'),
+    path('profile/', views.profile, name='profile'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+    path('logout/',views.logout, name="logout"),
+    path('update-profile-picture/', views.update_profile, name='update_profile_picture'),
+    path('post/<int:post_id>/like/', views.like_post, name='like_post'),
+    path('post/<int:post_id>/dislike/', views.dislike_post, name='dislike_post'),
+    path('application-success/', application_success, name='application_success'),
     path('apply/', apply_for_staff, name='apply_for_staff'),
     path('polls/', views.PollListView.as_view(), name='poll_list'),
     path("poll/<int:poll_id>/", views.PollView.as_view(), name="single_poll"),
     path('events/', EventListView.as_view(), name='event-detail'),
-    
     path('delete-account/', delete_account, name='delete_account'),
     path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
     path('comment/<int:comment_id>/delete/', delete_comment, name='delete_comment'),
@@ -47,7 +51,6 @@ urlpatterns = [
 
     # ADMIN PAGES 
    
-    path('contact/success/', contact_us_success, name='contact_us_success'),
     path('admin/contact-messages/', views.admin_contact_messages, name='admin_contact_messages'),
     path('admin/contact-message/<int:message_id>/', view_contact_message, name='view_contact_message'),
     path('admin/contact-message/delete/<int:message_id>/', delete_contact_message, name='delete_contact_message'),

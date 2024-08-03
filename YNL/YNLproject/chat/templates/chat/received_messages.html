@@ -1,3 +1,7 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,7 +105,7 @@
                 </div>
                 <div class="message-timestamp">{{ message.timestamp }}</div>
                 <div class="message-actions">
-                    <a href="{% url 'chat_page' message.sender.username %}">Reply</a>
+                    <a href="{% url 'chat:chat_page' message.sender.username %}">Reply</a>
                 </div>
             </div>
         {% empty %}
@@ -110,3 +114,4 @@
     </div>
 </body>
 </html>
+{% endblock %}

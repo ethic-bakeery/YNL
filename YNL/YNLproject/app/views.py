@@ -68,9 +68,9 @@ from .models import Event
 from .forms import EventForm
 
 
-# @login_required
-# def home(request):
-#     return render(request, 'app/index.html', {'user': request.user})
+
+def index(request):
+    return render(request, 'home/index.html')
 
 
 def home(request):
@@ -144,7 +144,7 @@ def register(request):
             messages.error(request, 'Please correct the errors below.')
     else:
         form = UserCreationForm()
-    return render(request, 'app/register.html', {'form': form})
+    return render(request, 'home/register.html', {'form': form})
 
 def login(request):
     if request.method == 'POST':
@@ -158,7 +158,7 @@ def login(request):
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
-    return render(request, 'app/login.html', {'form': form})
+    return render(request, 'home/login.html', {'form': form})
 
 @login_required
 def profile(request):
@@ -318,7 +318,7 @@ def forgot_password(request):
                 form.add_error('email', 'No user with this email address.')
     else:
         form = ForgotPasswordForm()
-    return render(request, 'app/forgot_password.html', {'form': form})
+    return render(request, 'home/forgot_password.html', {'form': form})
 
 def otp_verification(request):
     if request.method == 'POST':
@@ -333,7 +333,7 @@ def otp_verification(request):
                 form.add_error('otp', 'Invalid OTP.')
     else:
         form = OTPVerificationForm()
-    return render(request, 'app/otp_verification.html', {'form': form})
+    return render(request, 'home/otp_verification.html', {'form': form})
 
 def reset_password(request):
     if request.method == 'POST':
@@ -347,7 +347,7 @@ def reset_password(request):
             return redirect('login')  #
     else:
         form = ResetPasswordForm()
-    return render(request, 'app/reset_password.html', {'form': form})
+    return render(request, 'home/reset_password.html', {'form': form})
 
 @login_required
 def create_profile(request):
@@ -373,10 +373,10 @@ def contact_us(request):
     else:
         form = ContactMessageForm()
     
-    return render(request, 'app/contact_us.html', {'form': form})
+    return render(request, 'home/contact_us.html', {'form': form})
 
 def contact_us_success(request):
-    return render(request, 'app/contact_us_success.html')
+    return render(request, 'home/contact_us_success.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def admin_contact_messages(request):
@@ -599,7 +599,7 @@ def logout(request):
     return redirect('login')
 
 def terms_and_conditions(request):
-    return render(request, 'app/terms_and_conditions.html')
+    return render(request, 'home/terms_and_conditions.html')
 
 def our_team(request):
-    return render(request, 'app/our_team.html')
+    return render(request, 'home/our_team.html')

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}YNL{% endblock %}</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px; 
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            height: 70px; 
+            background-color: #1e2a49;
+            padding: 0 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar-logo {
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 2rem; /* Add margin to create space between logo and menu */
+        }
+
+        .navbar-list {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            margin-left: 55rem; /* Adjust this value to control how far from the left edge */
+        }
+
+        .navbar-list li {
+            margin: 0 0.75rem; /* Adjusted margin for spacing */
+        }
+
+        .navbar-list li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .navbar-list li a:hover {
+            color: #4a5d7e;
+        }
+
+        .profile-dropdown {
+            display: none; /* Hide dropdown for unauthenticated users */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <img class="navbar-logo" alt="logo" src="{% static 'media/media/uploads/images/Untitled.jpeg' %}">
+        <ul class="navbar-list">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'terms_and_conditions' %}">Terms</a></li>
+            <li><a href="{% url 'our_team' %}">Our Team</a></li>
+            <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+        </ul>
+        <!-- No profile-dropdown for unauthenticated users -->
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

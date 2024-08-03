@@ -24,7 +24,7 @@
             margin: 0 auto;
         }
 
-        h3, h4 {
+        h1 {
             color: #fff;
             margin: 0;
         }
@@ -34,13 +34,22 @@
         }
 
         input[type="text"], textarea {
-            width: 80%;
             padding: 0.8rem;
             border-radius: 4px;
             border: 1px solid #ddd;
-            margin-right: 0.5rem;
             background-color: #fff;
             color: #000;
+        }
+
+        input[type="text"] {
+            width: 50%; /* Reduced width */
+        }
+
+        textarea {
+            width: 230px; /* Adjusted width */
+            height: 25px; /* Set height for better appearance */
+            display: inline-block;
+            vertical-align: middle;
         }
 
         button {
@@ -87,6 +96,7 @@
 
         .post-actions {
             display: flex;
+            align-items: center;
             gap: 1rem;
         }
 
@@ -94,23 +104,21 @@
             display: inline;
         }
 
-        .btn {
-            padding: 0.8rem 1.5rem;
-            background-color: #1e2a49;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            cursor: pointer;
+        .post-actions .like-count {
+            margin-left: 1rem;
         }
 
-        .btn:hover {
-            background-color: #4a5d7e;
-        }
-
-        .auth-links {
+        .comment-form {
             margin-top: 1rem;
+        }
+
+        .comment-form form {
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-form textarea {
+            margin-right: 0.5rem;
         }
 
         .comments-section {
@@ -169,6 +177,7 @@
                                 {% csrf_token %}
                                 <button type="submit">Like</button>
                             </form>
+                            <span class="like-count">{{ ps.likes.count }} Likes</span>
                             <form method="post" action="{% url 'dislike_post' ps.id %}">
                                 {% csrf_token %}
                                 <button type="submit">Dislike</button>
@@ -211,11 +220,6 @@
             <p>Please <a href="{% url 'login' %}">login</a> to view and post comments.</p>
         {% endif %}
 
-        {% if user.is_authenticated %}
-            <div class="auth-links">
-                <a href="{% url 'logout' %}" class="btn">Logout</a>
-            </div>
-        {% endif %}
     </div>
 
     <script type="text/javascript">

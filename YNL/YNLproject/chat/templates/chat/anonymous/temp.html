@@ -1,3 +1,8 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,14 +19,16 @@
             padding: 0;
         }
 
-        .chat-container {
+      .chat-container {
             max-width: 600px;
             margin: 2rem auto;
             padding: 1rem;
-            background-color: #06112F; /* Darker nested div background */
+            background-color: #06112F; 
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+            margin-top: 80px; /* Adjust this value as needed */
+}
+
 
         .chat-header {
             text-align: center;
@@ -192,3 +199,5 @@
     </script>
 </body>
 </html>
+
+{% endblock %}
