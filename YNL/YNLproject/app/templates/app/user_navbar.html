@@ -142,8 +142,12 @@
         <img class="navbar-logo" alt="logo">
         <ul class="navbar-list">
             <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'event-detail' %}">Events</a></li>
-            <li><a href="{% url 'chat:user_list' %}">Chats</a></li>
+            <li><a href="{% url 'event-detail' %}">Events</a></li> 
+            <li><a href="{% url 'poll_list' %}">Poll List</a></li> 
+            {% if user.is_superuser %}
+            <li><a href="{% url 'profile_list' %}">Chats</a></li> 
+            {% endif %}
+            <!-- <p> url 'chat:user_list'</p> to be use later -->
             <li><a href="{% url 'chat:anonymous' %}">Ghost Chat</a></li>
             <li><a href="{% url 'chat:received_messages' %}">Friend reqs</a></li>
         </ul>
@@ -154,6 +158,7 @@
                 <span>{{ user.username }} <i class="fa-solid fa-angle-down"></i></span>
             </div>
             <ul class="profile-dropdown-list">
+                {% if user.is_superuser %}
                 <li class="profile-dropdown-list-item">
                     <a href="{% url 'create-event' %}">
                         <i class="fa-regular fa-envelope"></i>
@@ -172,18 +177,25 @@
                         Create poll
                     </a>
                 </li>
+                {% endif %}
                 <li class="profile-dropdown-list-item">
                     <a href="{% url 'apply_for_staff' %}">
                         <i class="fa-solid fa-user-plus"></i>
                         Apply for staff 
                     </a>
                 </li>
+                <!-- <li class="profile-dropdown-list-item">
+                    <a href="{% url 'profile_list' %}">
+                        <i class="fa-solid fa-user-plus"></i>
+                        Users profile 
+                    </a>
+                </li> -->
                 <li class="profile-dropdown-list-item">
                     <a href="{% url 'profile' %}">
                         <i class="fa-regular fa-circle-question"></i>
                         Profile
                     </a>
-                </li>
+                </li> 
                 <hr />
                 <li class="profile-dropdown-list-item">
                     <a href="{% url 'logout' %}">

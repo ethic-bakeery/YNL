@@ -1,15 +1,32 @@
-
 from django.urls import path
 from . import views
-from .views import  admin_staff_applications, approve_application
-from .views import application_success
-from .views import forgot_password, otp_verification, reset_password,create_profile
-from .views import contact_us, contact_us_success, admin_contact_messages, view_contact_message, delete_contact_message
-from .views import apply_for_staff, admin_dashboard, approve_request, reject_request, PollCreateView
-from .views import EventCreateView, EventListView, create_post, delete_account,add_comment, delete_comment
-
-
-
+from .views import (
+    admin_staff_applications,
+    approve_application,
+    application_success,
+    forgot_password,
+    otp_verification,
+    reset_password,
+    create_profile,
+    contact_us,
+    contact_us_success,
+    admin_contact_messages,
+    view_contact_message,
+    delete_contact_message,
+    apply_for_staff,
+    admin_dashboard,
+    approve_request,
+    reject_request,
+    PollCreateView,
+    EventCreateView,
+    EventListView,
+    create_post,
+    delete_account,
+    add_comment,
+    delete_comment,
+    profile_list,
+    profile_detail,
+)
 
 urlpatterns = [
     #unathenticated user
@@ -26,6 +43,13 @@ urlpatterns = [
     path('contact/success/', contact_us_success, name='contact_us_success'),
 
     #uthyenticated user
+    # urls.py
+
+
+
+    path('profiles/', profile_list, name='profile_list'),
+    path('profiles/<str:username>/', profile_detail, name='profile_detail'),
+
     path('post/<int:post_id>/comment/', add_comment, name='add_comment'),
     path('create_profile/', create_profile, name='create_profile'),
     path('home/', views.home, name='home'),

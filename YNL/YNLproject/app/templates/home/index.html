@@ -1,17 +1,69 @@
 {% extends 'home/base.html' %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Welcome to ANYL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 80px; /* Adjust this based on your navbar height */
+        }
+        h1 {
+            font-size: 3em;
+            color: #f5a623; /* Accent color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: #fff;
+            background-color: #f5a623; /* Accent color */
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .cta-button:hover {
+            background-color: #e59422; /* Slightly darker shade for hover effect */
+        }
+    </style>
 </head>
 <body>
-<h3>Hello home</h3>
+    <div class="container">
+        <h1>Welcome to ANYL</h1>
+        <p>
+            We are the All Nigerian Youth Congress (ANYL), a movement dedicated to empowering the youth of Nigeria to take charge of their future and drive positive change in our country. 
+        </p>
+        <p>
+            Our platform is designed to facilitate communication, collaboration, and activism among Nigerian youth. Here, you can engage in meaningful discussions, participate in polls and events, provide feedback, and connect with like-minded individuals.
+        </p>
+        <p>
+            <a href="/join" class="cta-button">Join Us</a>
+        </p>
+        <p>
+            <a href="/learn-more" class="cta-button">Learn More</a>
+        </p>
+    </div>
 </body>
 </html>
-
 {% endblock %}

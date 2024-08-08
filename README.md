@@ -1,8 +1,8 @@
-# Youth for Nigerian Leadership (YNL) Web Application
+# ANYL (All Nigerian Youth Congress) Web Application
 
 ## Project Overview
 
-**Youth for Nigerian Leadership (YNL)** is a transformative platform designed to engage and empower Nigerian youth in the reformation of the country's political system. This web application serves as a hub for organizing activities, facilitating communication, and managing various aspects of the organization. By leveraging technology, YNL aims to drive positive change, promote effective leadership, and address critical issues such as unity, security, and economic growth.
+**ANYL (All Nigerian Youth Congress)** is a transformative platform designed to engage and empower Nigerian youth in the reformation of the country's political system. This web application serves as a hub for organizing activities, facilitating communication, and managing various aspects of the organization. By leveraging technology, ANYL aims to drive positive change, promote effective leadership, and address critical issues such as unity, security, and economic growth.
 
 ## Objectives
 
@@ -79,5 +79,62 @@ We welcome contributions from the community! If you are interested in contributi
 ⚠️ If you are not planning to contribute to this project, please avoid cloning or forking the repository
 
 # Contact
-For any inquiries or further information, please contact us at [bakeery.wtf@gmail.com]                                                                                
-# YNL
+For any inquiries or further information, please contact us at [bakeery.wtf@gmail.com]         
+
+## Screenshots
+
+Below are some screenshots of the ANYL web application:
+
+- **Home Page**
+  ![Home Page](FireShot/home.png)
+  
+- **About Us Page**
+  ![About Us](FireShot/about-us.png)
+  
+- **Login Page**
+  ![Login](FireShot/login.png)
+  
+- **Registration Page**
+  ![Register](FireShot/register.png)
+  
+- **User Profile**
+  ![User Profile](FireShot/user_profile.png)
+  
+- **Create Post**
+  ![Create Post](FireShot/create_post.png)
+  
+- **Create Event**
+  ![Create Event](FireShot/create_event.png)
+  
+- **Polls**
+  ![Polls](FireShot/poll_lists.png)
+  
+- **Update Profile**
+  ![Update Profile](FireShot/update_profile.png)
+  
+- **Contact Us**
+  ![Contact Us](FireShot/contact-us.png)
+  
+- **Policy**
+  ![Policy](FireShot/policy.png)
+  
+- **Create Poll**
+  ![Create Poll](FireShot/create_poll.png)
+  
+- **Events**
+  ![Events](FireShot/events.png)
+  
+- **Anonymous Chat**
+  ![Anonymous Chat](FireShot/anonymous_chat.png)
+  
+- **Normal Chat**
+  ![Normal Chat](FireShot/normalchat.png)
+  
+- **Post**
+  ![Post](FireShot/post.png)
+  
+- **Apply for App Features**
+  ![Apply for App Features](FireShot/apply_for_app_features.png)
+
+
+#Note: for more features of the app kindly clone the repository

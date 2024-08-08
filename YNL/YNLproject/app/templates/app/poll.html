@@ -1,65 +1,158 @@
-{% extends 'app/base.html' %}
+{% extends 'app/user_navbar.html' %}
 
-{% block body %}
-<!-- Display Success Message if Available -->
-{% if success_message %}
-<div class="alert alert-success">{{ success_message }}</div>
-{% endif %}
+{% block content %}
 
-<!-- Display Error Message if User Already Voted -->
-{% if error_message %}
-<div class="alert alert-danger">{{ error_message }}</div>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ poll.name }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
 
-<!-- Poll Details -->
-<h2>{{ poll.name }}</h2>
-<i><h6>{{ poll.description }}</h6></i>
-<hr class="my-4">
+        /* Adjust container position */
+        .container {
+            max-width: 800px;
+            margin: 4rem auto 2rem; /* Increased top margin to push container down */
+            padding: 2rem;
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
 
-<!-- Voting Form -->
-{% if user_vote %}
-    <p>You have already voted in this poll.</p>
-{% else %}
-<form method="post">
-    {% csrf_token %}
-    {% for choice in poll.choices.all %}
-    <div class="form-check">
-      <input class="form-check-input" type="radio" name="choice_id" id="choice-{{ choice.id }}" value="{{ choice.id }}">
-      <label class="form-check-label" for="choice-{{ choice.id }}">
-        {{ choice.text }}
-      </label>
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .alert-success {
+            background-color: #4a5d7e; /* Success color */
+        }
+
+        .alert-danger {
+            background-color: #d9534f; /* Danger color */
+        }
+
+        h2 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        h6 {
+            color: #ddd;
+        }
+
+        .form-check {
+            margin-bottom: 1rem;
+        }
+
+        .form-check-input {
+            margin-right: 0.5rem;
+        }
+
+        .form-check-label {
+            color: #fff;
+        }
+
+        .btn-outline-success {
+            color: #fff;
+            border: 1px solid #4a5d7e;
+            background-color: transparent;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-outline-success:hover {
+            background-color: #4a5d7e;
+        }
+
+        hr.my-4 {
+            border: 1px solid #4a5d7e; /* Line color */
+            margin: 2rem 0;
+        }
+
+        #piechart {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Display Success Message if Available -->
+        {% if success_message %}
+        <div class="alert alert-success">{{ success_message }}</div>
+        {% endif %}
+
+        <!-- Display Error Message if User Already Voted -->
+        {% if error_message %}
+        <div class="alert alert-danger">{{ error_message }}</div>
+        {% endif %}
+
+        <!-- Poll Details -->
+        <h2>{{ poll.name }}</h2>
+        <h6>{{ poll.description }}</h6>
+        <hr class="my-4">
+
+        <!-- Voting Form -->
+        {% if user_vote %}
+        <p>You have already voted in this poll.</p>
+        {% else %}
+        <form method="post">
+            {% csrf_token %}
+            {% for choice in poll.choices.all %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="choice_id" id="choice-{{ choice.id }}" value="{{ choice.id }}">
+                <label class="form-check-label" for="choice-{{ choice.id }}">
+                    {{ choice.text }}
+                </label>
+            </div>
+            {% endfor %}
+            <hr class="my-4">
+            <button class="btn-outline-success">Vote</button>
+        </form>
+        {% endif %}
+
+        <!-- Chart Display if Poll Results are Available -->
+        {% if poll_results %}
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <div id="piechart"></div>
+        <script type="text/javascript">
+            var poll_results = {{ poll_results|safe }};
+
+            // Load Google Charts
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            // Draw the chart and set the chart values
+            function drawChart() {
+                poll_results.unshift(["Choice", "Vote Count"]);
+                var data = google.visualization.arrayToDataTable(poll_results);
+
+                // Optional; add a title and set the width and height of the chart
+                var options = { 'width': 550, 'height': 400 };
+
+                // Display the chart inside the <div> element with id="piechart"
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+            }
+        </script>
+        {% endif %}
     </div>
-    {% endfor %}
-    <hr class="my-4">
-    <button class="btn btn-outline-success">Vote</button>
-  </form>
-  
-{% endif %}
-
-<!-- Chart Display if Poll Results are Available -->
-{% if poll_results %}
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<div id="piechart"></div>
-<script type="text/javascript">
-  var poll_results = {{ poll_results|safe }};
-
-  // Load Google Charts
-  google.charts.load('current', { 'packages': ['corechart'] });
-  google.charts.setOnLoadCallback(drawChart);
-
-  // Draw the chart and set the chart values
-  function drawChart() {
-    poll_results.unshift(["Choice", "Vote Count"]);
-    var data = google.visualization.arrayToDataTable(poll_results);
-
-    // Optional; add a title and set the width and height of the chart
-    var options = { 'width': 550, 'height': 400 };
-
-    // Display the chart inside the <div> element with id="piechart"
-    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-    chart.draw(data, options);
-  }
-</script>
-{% endif %}
+</body>
+</html>
 
 {% endblock %}

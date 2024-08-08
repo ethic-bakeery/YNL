@@ -3,41 +3,26 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.contrib.auth.decorators import login_required
 from django.utils.html import escape
 from django.contrib.auth import logout as auth_logout
 from app.models import Post
-from django.shortcuts import render, redirect
 from django.views import View
-from .models import Poll, Choice
-
-from django.views import View
-from django.shortcuts import render
 from app.models import Poll, Choice, Vote
-
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .forms import PollForm, ChoiceForm
 from django.db.models import Q 
 from app.forms import StaffApplicationForm
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from .models import StaffApplication
 from .forms import StaffApplicationForm
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm
 from .models import Profile
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile
 from .forms import ProfileUpdateForm
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
@@ -47,7 +32,6 @@ from django.utils.crypto import get_random_string
 from .forms import ForgotPasswordForm, OTPVerificationForm, ResetPasswordForm
 import random
 from django.contrib.auth.decorators import login_required
-from .models import Post
 from .forms import PostForm  
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import AuthenticationForm
@@ -58,16 +42,30 @@ from .models import Post
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import ContactMessage
 from .forms import ContactMessageForm
-
-from .forms import EventForm
-
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Event
 from .forms import EventForm
 
+def user_is_staff(user):
+    return user.is_staff
 
+@login_required
+def profile_list(request):
+    query = request.GET.get('q', '')
+    profiles = Profile.objects.filter(
+        Q(user__username__icontains=query) | 
+        Q(user__first_name__icontains=query) |
+        Q(user__last_name__icontains=query)
+    )
+    return render(request, 'app/profile_list.html', {'profiles': profiles, 'query': query})
+
+
+@login_required
+def profile_detail(request, username):
+    profile = get_object_or_404(Profile, user__username=username)
+    return render(request, 'app/profile_detail.html', {'profile': profile})
 
 def index(request):
     return render(request, 'home/index.html')
@@ -152,13 +150,21 @@ def login(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
+            
+            # Check if the user has a profile
+            if not Profile.objects.filter(user=user).exists():
+                # Redirect to create profile page if profile does not exist
+                return redirect('create_profile')
+                
             messages.success(request, 'Login successful.')
             return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
     else:
         form = AuthenticationForm()
+        
     return render(request, 'home/login.html', {'form': form})
+
 
 @login_required
 def profile(request):
@@ -383,12 +389,12 @@ def admin_contact_messages(request):
     messages = ContactMessage.objects.all()
     return render(request, 'admin/admin_contact_messages.html', {'messages': messages})
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def view_contact_message(request, message_id):
     message = get_object_or_404(ContactMessage, id=message_id)
     return render(request, 'admin/view_contact_message.html', {'message': message})
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def delete_contact_message(request, message_id):
     message = get_object_or_404(ContactMessage, id=message_id)
     if request.method == 'POST':
@@ -417,7 +423,7 @@ def apply_for_staff(request):
     
     return render(request, 'app/apply_for_admin.html', {'form': form})
 
-
+@user_passes_test(lambda u: u.is_superuser)
 def admin_dashboard(request):
     applications = StaffApplication.objects.all()
     return render(request, 'admin/approved_staff.html', {'applications': applications})
@@ -438,7 +444,6 @@ def approve_request(request, request_id):
     
     messages.success(request, f'Request from {user.username} has been approved.')
     return redirect('make_staff')
-
 
 @method_decorator(login_required, name='dispatch')
 class PollView(View):
@@ -494,7 +499,8 @@ class PollView(View):
             }
         )
 
-
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(user_is_staff), name='dispatch')
 class PollCreateView(View):
     def get(self, request):
         poll_form = PollForm()
@@ -529,7 +535,6 @@ class PollCreateView(View):
                 'choice_form': choice_form
             }
         )
-
 @method_decorator(login_required, name='dispatch')
 class PollListView(View):
     def get(self, request):
@@ -571,6 +576,8 @@ class EventListView(View):
             context=context
         )
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(user_passes_test(user_is_staff), name='dispatch')
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
     form_class = EventForm

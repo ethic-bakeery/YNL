@@ -173,11 +173,10 @@
                         <p class="post-title">{{ ps.title }}</p>
                         <p class="post-description">{{ ps.description }}</p>
                         <div class="post-actions">
-                            <form method="post" action="{% url 'like_post' ps.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Like</button>
-                            </form>
+                            <button class="like-button" data-post-id="{{ ps.id }}" data-liked="{{ ps.likes.count }} likes">Like</button>
                             <span class="like-count">{{ ps.likes.count }} Likes</span>
+
+                            <!-- Assuming you have a dislike functionality -->
                             <form method="post" action="{% url 'dislike_post' ps.id %}">
                                 {% csrf_token %}
                                 <button type="submit">Dislike</button>
@@ -219,11 +218,41 @@
         {% else %}
             <p>Please <a href="{% url 'login' %}">login</a> to view and post comments.</p>
         {% endif %}
-
     </div>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.like-button');
+
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const postId = this.dataset.postId;
+                    const currentLikeCount = parseInt(this.nextElementSibling.textContent.split(' ')[0]);
+                    const liked = this.dataset.liked === 'true';
+
+                    fetch(`/like_post/${postId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.liked) {
+                            this.textContent = 'Unlike';
+                            this.dataset.liked = 'true';
+                        } else {
+                            this.textContent = 'Like';
+                            this.dataset.liked = 'false';
+                        }
+                        this.nextElementSibling.textContent = `${data.likes_count} Likes`;
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+
             const toggleButtons = document.querySelectorAll('.toggle-comments-btn');
 
             toggleButtons.forEach(button => {

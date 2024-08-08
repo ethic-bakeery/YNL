@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .user-list-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #06112F; /* Darker nested div background */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        form {
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-right: 0.5rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background-color: #1e2a49;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4a5d7e;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-item {
+            background-color: #1e2a49;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .user-item:hover {
+            background-color: #4a5d7e;
+        }
+
+        .user-item img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .user-item span {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .user-list-container {
+                padding: 1rem;
+            }
+
+            .user-item {
+                padding: 0.8rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-list-container">
+        <h1>User Profiles</h1>
+        <form method="GET" action="{% url 'profile_list' %}">
+            <input type="text" name="q" placeholder="Search profiles" value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+        <ul>
+            {% for profile in profiles %}
+            <li class="user-item" onclick="window.location.href='{% url 'profile_detail' profile.user.username %}'">
+                {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="{{ profile.user.username }}'s profile picture">
+                {% else %}
+                <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Default profile picture">
+                {% endif %}
+                <span>{{ profile.user.username }}</span>
+            </li>
+            {% empty %}
+            <p>No profiles found.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

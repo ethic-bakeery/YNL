@@ -1,17 +1,92 @@
 {% extends 'home/base.html' %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About Us - ANYL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 80px; /* Adjust this value based on your navbar height */
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #f5a623; /* Accent color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 2em;
+            color: #f5a623;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .highlight {
+            color: #f5a623; /* Accent color */
+            font-weight: bold;
+        }
+        /* Optional: adjust navbar position if necessary */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure navbar is above other content */
+        }
+    </style>
 </head>
 <body>
-    <h3>Our team</h3>
+    <div class="container">
+        <h1>About Us</h1>
+        <div class="section">
+            <h2>Our Mission</h2>
+            <p>
+                At <span class="highlight">ANYL (All Nigerian Youth Congress)</span>, our mission is to empower Nigerian youth to actively participate in the country's political and social reform. We aim to create a unified platform where young leaders can collaborate, innovate, and drive positive change in our society.
+            </p>
+        </div>
+        <div class="section">
+            <h2>Our Vision</h2>
+            <p>
+                We envision a Nigeria where the youth are at the forefront of leadership and decision-making. Through our initiatives, we strive to foster a sense of unity, address critical national issues, and build a sustainable future for all Nigerians.
+            </p>
+        </div>
+        <div class="section">
+            <h2>Our Values</h2>
+            <p>
+                We are committed to:
+                <ul>
+                    <li><span class="highlight">Integrity</span>: Upholding the highest standards of honesty and transparency.</li>
+                    <li><span class="highlight">Collaboration</span>: Working together to achieve common goals and support one another.</li>
+                    <li><span class="highlight">Innovation</span>: Encouraging creative solutions and new ideas to address challenges.</li>
+                    <li><span class="highlight">Empowerment</span>: Providing the tools and opportunities for youth to lead and make a difference.</li>
+                </ul>
+            </p>
+        </div>
+        <div class="section">
+            <h2>Get Involved</h2>
+            <p>
+                We welcome all Nigerian youth to join us in our mission. Whether you want to participate in events, contribute to discussions, or become a part of our leadership team, there are many ways to get involved. Visit our <a href="{% url 'contact_us' %}" style="color: #f5a623;">Contact us</a> page for more information on how you can contribute to our cause.
+            </p>
+        </div>
+    </div>
 </body>
 </html>
-
 {% endblock %}

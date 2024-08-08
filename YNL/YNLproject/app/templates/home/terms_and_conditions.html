@@ -1,17 +1,97 @@
 {% extends 'home/base.html' %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Our Policy - ANYL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27; /* Darker background */
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-top: 80px; /* Adjust this value based on your navbar height */
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #f5a623; /* Accent color */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 2em;
+            color: #f5a623;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        ul {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .highlight {
+            color: #f5a623; /* Accent color */
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>Teams and condition</h1>
+    <div class="container">
+        <h1>Our Policy</h1>
+        <div class="section">
+            <h2>Privacy Policy</h2>
+            <p>
+                At <span class="highlight">ANYL (All Nigerian Youth Congress)</span>, we value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data when you visit our website or use our services.
+            </p>
+            <p>
+                We collect personal information such as names, email addresses, and contact details when you voluntarily provide them to us. We use this information to communicate with you, process your requests, and improve our services. We do not share your information with third parties except as required by law or to fulfill our services.
+            </p>
+        </div>
+        <div class="section">
+            <h2>Terms of Service</h2>
+            <p>
+                By accessing or using <span class="highlight">ANYL</span> services, you agree to comply with our Terms of Service. These terms govern your use of our website, including any content, functionality, and services offered. We reserve the right to modify these terms at any time, and your continued use of our services constitutes acceptance of the updated terms.
+            </p>
+            <p>
+                You agree to use our services for lawful purposes only and to respect the rights and privacy of others. Any misuse or unauthorized use of our services may result in the suspension or termination of your access.
+            </p>
+        </div>
+        <div class="section">
+            <h2>Code of Conduct</h2>
+            <p>
+                We are committed to maintaining a respectful and inclusive environment for all members of the <span class="highlight">ANYL</span> community. We expect all users to adhere to the following Code of Conduct:
+            </p>
+            <ul>
+                <li><span class="highlight">Respect</span>: Treat others with respect and kindness.</li>
+                <li><span class="highlight">Integrity</span>: Engage in honest and ethical behavior.</li>
+                <li><span class="highlight">Inclusivity</span>: Foster a welcoming environment for everyone, regardless of background or identity.</li>
+                <li><span class="highlight">Responsibility</span>: Take responsibility for your actions and their impact on others.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <h2>Contact Us</h2>
+            <p>
+                If you have any questions or concerns about our policies, please contact us via our <a href="{% url 'contact_us' %}" style="color: #f5a623;">Contact us</a> page. We are here to assist you and address any issues you may have.
+            </p>
+        </div>
+    </div>
 </body>
 </html>
-
 {% endblock %}
