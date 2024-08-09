@@ -108,6 +108,9 @@ Below are some screenshots of the ANYL web application:
   
 - **Polls**
   ![Polls](FireShot/poll_lists.png)
+
+- **polling**
+  ![Polls](FireShot/give_poll.png)
   
 - **Update Profile**
   ![Update Profile](FireShot/update_profile.png)
