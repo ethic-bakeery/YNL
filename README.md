@@ -19,6 +19,7 @@
 
 ### 2. **Communication Tools**
    - **ChatMessage**: Facilitates direct messaging between users.
+   - **Anonymous chat**: This facilitate whistleblowers to share information with people anonymously.
    - **LiveChatSession**: Enables real-time group chats.
    - **GroupMessage**: Allows messaging within groups.
 
