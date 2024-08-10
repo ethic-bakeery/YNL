@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**ANYL (All Nigerian Youth Congress)** is a transformative platform designed to engage and empower Nigerian youth in the reformation of the country's political system. This web application serves as a hub for organizing activities, facilitating communication, and managing various aspects of the organization. By leveraging technology, ANYL aims to drive positive change, promote effective leadership, and address critical issues such as unity, security, and economic growth.
+**ANYC (All Nigerian Youth Congress)** is a transformative platform designed to engage and empower Nigerian youth in the reformation of the country's political system. This web application serves as a hub for organizing activities, facilitating communication, and managing various aspects of the organization. By leveraging technology, ANYL aims to drive positive change, promote effective leadership, and address critical issues such as unity, security, and economic growth.
 
 ## Objectives
 
