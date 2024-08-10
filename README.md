@@ -1,4 +1,4 @@
-# ANYL (All Nigerian Youth Congress) Web Application
+# ANYC (All Nigerian Youth Congress) Web Application
 
 ## Project Overview
 
