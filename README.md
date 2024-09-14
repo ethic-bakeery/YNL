@@ -108,7 +108,7 @@ Below are some screenshots of the ANYL web application:
   ![Create Event](FireShot/create_event.png)
   
 - **Polls**
-  ![Polls](FireShot/poll_lists.png)
+  ![Polls](FireShot/polling_lists.png)
 
 - **polling**
   ![Polls](FireShot/give_poll.png)
@@ -135,7 +135,7 @@ Below are some screenshots of the ANYL web application:
   ![Normal Chat](FireShot/normalchat.png)
   
 - **Post**
-  ![Post](FireShot/post.png)
+  ![Post](FireShot/posts.png)
   
 - **Apply for App Features**
   ![Apply for App Features](FireShot/apply_for_app_features.png)
