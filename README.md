@@ -47,7 +47,7 @@
 ## Getting Started
 
 1. **Clone the Repository**: 
-   ```git clone https://github.com/your-repo/ynl-webapp.git```
+   ```git clone https://github.com/ethic-bakeery/YNL.git```
 
 2. **Install Dependencies**:
 ```pip install -r requirements.txt```
