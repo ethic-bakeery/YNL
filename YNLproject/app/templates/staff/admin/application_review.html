@@ -1,0 +1,97 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-center">
+                <h2 class="text-2xl font-bold text-white">Review Application</h2>
+                <p class="mt-2 text-blue-100">Approve or reject this staff application</p>
+            </div>
+            
+            <div class="px-6 py-8 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-700">Applicant Information</h3>
+                        <div class="mt-2 space-y-2 text-gray-600">
+                            <p><span class="font-medium">Name:</span> {{ application.name }}</p>
+                            <p><span class="font-medium">Email:</span> {{ application.email }}</p>
+                            <p><span class="font-medium">Phone:</span> {{ application.phone }}</p>
+                            <p><span class="font-medium">User:</span> {{ application.user.username }}</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-700">Application Details</h3>
+                        <div class="mt-2 space-y-2 text-gray-600">
+                            <p><span class="font-medium">Status:</span> 
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    {% if application.status == 'Approved' %}bg-green-100 text-green-800
+                                    {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                                    {{ application.status }}
+                                </span>
+                            </p>
+                            <p><span class="font-medium">Submitted:</span> {{ application.created_at|date:"F j, Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-medium text-gray-700">Applicant Message</h3>
+                    <div class="mt-2 p-4 bg-gray-50 rounded-md">
+                        <p class="text-gray-600">{{ application.message }}</p>
+                    </div>
+                </div>
+                
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            Decision
+                        </label>
+                        {{ form.status }}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.admin_message.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">
+                            Message to Applicant
+                        </label>
+                        {{ form.admin_message }}
+                    </div>
+                    
+                    <div class="pt-4 flex justify-end space-x-3">
+                        <button type="submit" name="approve" value="1" 
+                                class="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                            Approve
+                        </button>
+                        <button type="submit" name="reject" value="1" 
+                                class="px-6 py-3 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                            Reject
+                        </button>
+                    </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    select, textarea {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: white;
+    }
+    
+    select:focus, textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    textarea {
+        min-height: 100px;
+    }
+</style>
+{% endblock %}

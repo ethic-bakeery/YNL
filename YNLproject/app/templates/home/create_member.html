@@ -1,0 +1,196 @@
+{% extends 'app/user_navbar.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Member | Organization Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            }
+          },
+          boxShadow: {
+            card: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    input:focus, select:focus {
+      outline: 2px solid #0ea5e9;
+      outline-offset: 2px;
+    }
+    .form-input-transition {
+      transition: all 0.2s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800 py-12 px-4 sm:px-6">
+  <div class="max-w-lg mx-auto">
+    <!-- Logo/Header Area -->
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-brand-600 text-white mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900">Member Registration</h1>
+      <p class="mt-2 text-gray-600">Add a new member to your organization</p>
+    </div>
+
+    <!-- Card Container -->
+    <div class="bg-white rounded-xl shadow-card overflow-hidden">
+      <!-- Form Header -->
+      <div class="bg-gradient-to-r from-brand-600 to-brand-700 px-6 py-4">
+        <h2 class="text-xl font-semibold text-white">Member Information</h2>
+        <p class="text-brand-100 text-sm">Please fill in all required fields</p>
+      </div>
+
+      <!-- Form Body -->
+      <div class="p-6">
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+          {% csrf_token %}
+          
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <!-- Name Field -->
+            <div class="col-span-2">
+              <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+              {{ form.name|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500"|attr:"placeholder:Enter member's full name" }}
+              {% if form.name.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.name.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- State Field -->
+            <div>
+              <label for="{{ form.state.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+              {{ form.state|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500" }}
+              {% if form.state.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.state.errors.0 }}</p>
+              {% endif %}
+            </div>
+            <div>
+                <label for="{{ form.priority.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                {{ form.priority|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500" }}
+                {% if form.priority.errors %}
+                  <p class="mt-1 text-sm text-red-600">{{ form.priority.errors.0 }}</p>
+                {% endif %}
+              </div>
+
+            <!-- Level Field -->
+            <div>
+              <label for="{{ form.level.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Level</label>
+              {{ form.level|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500" }}
+              {% if form.level.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.level.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Position Field -->
+            <div class="col-span-2">
+              <label for="{{ form.position.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Position</label>
+              {{ form.position|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500" }}
+              {% if form.position.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.position.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Email Field -->
+            <div class="col-span-2">
+              <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              {{ form.email|add_class:"w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-800 form-input-transition focus:ring-0 focus:border-brand-500"|attr:"placeholder:name@example.com" }}
+              {% if form.email.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.email.errors.0 }}</p>
+              {% endif %}
+            </div>
+
+            <!-- Image Upload Field -->
+            <div class="col-span-2">
+              <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">Profile Image</label>
+              <div class="mt-1 flex items-center">
+                <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 mr-4">
+                  <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </span>
+                <div class="flex-1">
+                  {{ form.image|add_class:"w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 form-input-transition" }}
+                </div>
+              </div>
+              {% if form.image.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.image.errors.0 }}</p>
+              {% endif %}
+              <p class="mt-1 text-xs text-gray-500">PNG, JPG or JPEG up to 2MB</p>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="pt-4 border-t border-gray-200 mt-8 flex items-center justify-between">
+            <button type="button" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-colors">
+              Cancel
+            </button>
+            <button type="submit" class="px-6 py-3 bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 text-white font-medium rounded-md shadow-sm transition-colors">
+              Create Member
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center text-sm text-gray-500">
+      <p>Need help? <a href="#" class="text-brand-600 hover:text-brand-500">Contact support</a></p>
+    </div>
+  </div>
+
+  <script>
+    // Preview uploaded image
+    document.addEventListener('DOMContentLoaded', function() {
+      const imageInput = document.querySelector('input[type="file"]');
+      const imagePreview = document.querySelector('.inline-block svg');
+      
+      imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'h-full w-full object-cover';
+            
+            // Replace the SVG with the image preview
+            imagePreview.parentNode.replaceChild(img, imagePreview);
+          }
+          
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+{% endblock %}

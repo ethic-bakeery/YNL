@@ -1,0 +1,171 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Poll</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-12 max-w-3xl">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="{% url 'poll_list' %}" class="inline-flex items-center text-primary-600 hover:text-primary-800 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Polls
+            </a>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">Create New Poll</h1>
+            
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <!-- Poll Name -->
+                <div>
+                    <label for="id_name" class="block text-sm font-medium text-gray-700 mb-1">Poll Name</label>
+                    <input type="text" name="name" id="id_name" required
+                           class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                           placeholder="Enter poll name">
+                    {% if poll_form.name.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ poll_form.name.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Poll Description -->
+                <div>
+                    <label for="id_description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                    <textarea name="description" id="id_description" rows="3"
+                              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                              placeholder="Enter poll description"></textarea>
+                </div>
+                
+                <!-- Choices Section -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">Poll Choices</h3>
+                    <div id="choices" class="space-y-4">
+                        <!-- Initial Choice -->
+                        <div class="choice-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Choice 1</label>
+                            <div class="flex gap-2">
+                                <input type="text" name="choice_text" required
+                                       class="flex-grow px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                                       placeholder="Enter choice text">
+                                <button type="button" onclick="removeChoice(this)" 
+                                        class="px-4 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition duration-200 hidden">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Second Choice -->
+                        <div class="choice-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Choice 2</label>
+                            <div class="flex gap-2">
+                                <input type="text" name="choice_text" required
+                                       class="flex-grow px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                                       placeholder="Enter choice text">
+                                <button type="button" onclick="removeChoice(this)" 
+                                        class="px-4 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition duration-200">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Choice Button -->
+                    <button type="button" onclick="addChoice()" 
+                            class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Add Another Choice
+                    </button>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="pt-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <a href="{% url 'poll_list' %}" class="px-6 py-3 border border-gray-300 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition">
+                        Cancel
+                    </a>
+                    <button type="submit" 
+                            class="px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition">
+                        Create Poll
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let choiceCount = 2;
+        
+        function addChoice() {
+            choiceCount++;
+            const choicesDiv = document.getElementById('choices');
+            const newChoiceHtml = `
+                <div class="choice-group">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Choice ${choiceCount}</label>
+                    <div class="flex gap-2">
+                        <input type="text" name="choice_text" required
+                               class="flex-grow px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                               placeholder="Enter choice text">
+                        <button type="button" onclick="removeChoice(this)" 
+                                class="px-4 py-3 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition duration-200">
+                            Remove
+                        </button>
+                    </div>
+                </div>`;
+            choicesDiv.insertAdjacentHTML('beforeend', newChoiceHtml);
+        }
+
+        function removeChoice(button) {
+            if (document.querySelectorAll('.choice-group').length > 2) {
+                button.closest('.choice-group').remove();
+                // Update labels for remaining choices
+                document.querySelectorAll('.choice-group').forEach((group, index) => {
+                    group.querySelector('label').textContent = `Choice ${index + 1}`;
+                });
+                choiceCount--;
+            } else {
+                alert("A poll must have at least 2 choices.");
+            }
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

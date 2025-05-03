@@ -1,0 +1,133 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
+                <h1 class="text-xl font-bold text-white">Received Messages</h1>
+            </div>
+            
+            <!-- Messages List -->
+            <div class="divide-y divide-gray-100">
+                {% for message in messages %}
+                    <div class="p-4 sm:p-6 {% if message.sender == user %}bg-gray-50{% endif %} transition-colors duration-150 hover:bg-gray-50">
+                        <div class="flex items-start space-x-4">
+                            <!-- Avatar (placeholder) -->
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-gradient-to-r {% if message.sender == user %}from-blue-500 to-blue-600{% else %}from-gray-500 to-gray-600{% endif %} flex items-center justify-center text-white font-medium">
+                                    {{ message.sender.username|slice:":1"|upper }}
+                                </div>
+                            </div>
+                            
+                            <!-- Message Content -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ message.sender.username }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        {{ message.timestamp|date:"M d, Y" }} at {{ message.timestamp|time:"g:i A" }}
+                                    </p>
+                                </div>
+                                
+                                <!-- Message Text -->
+                                <div class="mt-1 text-sm text-gray-700 whitespace-pre-wrap">
+                                    {{ message.message }}
+                                </div>
+                                
+                                <!-- Message Attachments -->
+                                <div class="mt-3 space-y-3">
+                                    {% if message.image %}
+                                        <div class="rounded-lg overflow-hidden border border-gray-200">
+                                            <img src="{{ message.image.url }}" alt="Image" class="max-h-80 w-auto object-contain">
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if message.voice %}
+                                        <div class="rounded-lg bg-gray-50 p-3 border border-gray-200">
+                                            <audio controls class="w-full">
+                                                <source src="{{ message.voice.url }}" type="audio/mpeg">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Message Actions -->
+                                <div class="mt-3 flex justify-end">
+                                    <a href="{% url 'chat:chat_page' message.sender.username %}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-150">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                                        </svg>
+                                        Reply
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="py-12 px-6">
+                        <div class="text-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                            </svg>
+                            <h3 class="mt-2 text-sm font-medium text-gray-900">No messages</h3>
+                            <p class="mt-1 text-sm text-gray-500">You don't have any messages yet.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Pagination (optional) -->
+        <div class="mt-6 flex justify-center">
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    1
+                </a>
+                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    2
+                </a>
+                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    3
+                </a>
+                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                    ...
+                </span>
+                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    8
+                </a>
+                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    9
+                </a>
+                <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                    10
+                </a>
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </nav>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

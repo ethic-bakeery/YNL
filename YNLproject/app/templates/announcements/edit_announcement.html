@@ -1,0 +1,68 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-6 text-center">
+            <h1 class="text-2xl font-bold text-white">Edit Announcement</h1>
+        </div>
+        <div class="px-6 py-8 sm:p-8">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_title" class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.title.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_description" class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.description.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_image" class="block text-sm font-medium text-gray-700 mb-2">Image (Optional)</label>
+                    {% if form.instance.image %}
+                    <div class="mb-4">
+                        <img src="{{ form.instance.image.url }}" alt="Current image" class="h-32 object-cover rounded-md">
+                        <label class="mt-2 flex items-center">
+                            <input type="checkbox" name="image-clear" id="image-clear_id">
+                            <span class="ml-2 text-sm text-gray-600">Remove current image</span>
+                        </label>
+                    </div>
+                    {% endif %}
+                    <div class="mt-1 flex items-center">
+                        <label class="cursor-pointer">
+                            <span class="sr-only">Choose new image</span>
+                            {{ form.image }}
+                        </label>
+                    </div>
+                    {% if form.image.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.image.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group flex items-center">
+                    {{ form.is_active }}
+                    <label for="id_is_active" class="ml-2 block text-sm text-gray-700">Active</label>
+                </div>
+                
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="{% url 'announcements_list' %}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

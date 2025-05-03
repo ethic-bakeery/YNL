@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Site Title{% endblock %}</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .bg-nav-DEFAULT { background-color: #ffffff; }
+        .bg-nav-hover { background-color: #f0f0f0; }
+        .nav-shadow { box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+        .smooth-transition { transition: all 0.3s ease; }
+        #navbarList { position: absolute; width: 100%; left: 0; z-index: 49; }
+        #navbarList.translate-y-0 { transform: translateY(0); transition: transform 0.3s ease-in-out; }
+        nav a.text-gray-700 { color: #4a5568; }
+        nav a.hover\:text-primary-dark:hover { color: #2c5282; }
+        nav .bg-primary { background-color: #4299e1; }
+        nav .bg-primary-dark { background-color: #2b6cb0; }
+        nav .hover\:bg-primary-dark:hover { background-color: #2b6cb0; }
+        #mobileMenuButton .fa-bars { color: #4a5568; }
+        #mobileMenuButton:hover .fa-bars { color: #2c5282; }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+        }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            display: block;
+            color: #4a5568;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+            color: #2c5282;
+        }
+
+        body { padding-top: 5rem; }
+
+        @media (min-width: 1024px) {
+            .lg\:hidden { display: none; }
+        }
+        @media (max-width: 1023px) {
+            .lg\:flex { display: none; }
+            .dropdown-content { position: static; box-shadow: none; display: none; }
+            .dropdown-mobile-open .dropdown-content { display: block; }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 text-gray-800 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-nav-DEFAULT nav-shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="{% url 'index' %}" class="text-xl font-bold hover:text-primary-dark">Your Logo</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden">
+                    <button id="mobileMenuButton" type="button" class="focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop nav -->
+                <div class="hidden lg:flex space-x-6 items-center">
+                    <a href="{% url 'home' %}" class="text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Home</a>
+                    <a href="{% url 'terms_and_conditions' %}" class="text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Policy</a>
+                    <a href="{% url 'our_team' %}" class="text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">About Us</a>
+                    <a href="{% url 'contact_us' %}" class="text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Contact</a>
+                    <a href="{% url 'members' %}" class="text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Members</a>
+
+                    {% if user.is_authenticated %}
+                    <div class="dropdown ml-4">
+                        <button class="flex items-center space-x-1 text-gray-700 hover:text-primary-dark">
+                            <span>Menu</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'profile' %}" class="dropdown-item"><i class="fas fa-user mr-2"></i>My Profile</a>
+                            <a href="" class="dropdown-item"><i class="fas fa-cog mr-2"></i>Settings</a>
+                            <a href="" class="dropdown-item"><i class="fas fa-envelope mr-2"></i>Messages</a>
+                            <div class="border-t border-gray-200 my-1"></div>
+                            <a href="{% url 'logout' %}" class="dropdown-item text-red-600 hover:text-red-800"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-700 border px-4 py-2 rounded-md hover:text-primary-dark hover:border-primary-dark text-sm">Login</a>
+                        <a href="{% url 'register' %}" class="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile nav -->
+        <div id="navbarList" class="hidden lg:hidden bg-nav-DEFAULT shadow-lg">
+            <div class="px-4 pt-2 pb-3 space-y-1">
+                <a href="{% url 'home' %}" class="block text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Home</a>
+                <a href="{% url 'terms_and_conditions' %}" class="block text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Policy</a>
+                <a href="{% url 'our_team' %}" class="block text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">About Us</a>
+                <a href="{% url 'contact_us' %}" class="block text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Contact</a>
+                <a href="{% url 'members' %}" class="block text-gray-700 hover:text-primary-dark px-3 py-2 rounded-md">Members</a>
+
+                {% if user.is_authenticated %}
+                <div class="pt-4 border-t border-gray-200">
+                    <a href="{% url 'profile' %}" class="block px-3 py-2 text-gray-700 hover:text-primary-dark"><i class="fas fa-user mr-2"></i>My Profile</a>
+                    <a href="" class="block px-3 py-2 text-gray-700 hover:text-primary-dark"><i class="fas fa-cog mr-2"></i>Settings</a>
+                    <a href="" class="block px-3 py-2 text-gray-700 hover:text-primary-dark"><i class="fas fa-envelope mr-2"></i>Messages</a>
+                    <a href="{% url 'logout' %}" class="block px-3 py-2 text-red-600 hover:text-red-800"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                </div>
+                {% else %}
+                <div class="pt-4 border-t border-gray-200">
+                    <a href="{% url 'login' %}" class="block w-full text-center text-gray-700 border px-4 py-2 rounded-md hover:border-primary-dark hover:text-primary-dark text-sm">Login</a>
+                    <a href="{% url 'register' %}" class="block w-full text-center bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark mt-2">Register</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        {% block content %}
+        <!-- Page-specific content goes here -->
+        {% endblock %}
+    </main>
+
+    <script>
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const navbarList = document.getElementById('navbarList');
+
+        mobileMenuButton.addEventListener('click', () => {
+            navbarList.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>

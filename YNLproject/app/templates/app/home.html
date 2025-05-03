@@ -1,0 +1,433 @@
+{% extends 'app/user_navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Search Form -->
+        <form method="POST" action="{% url 'home' %}" class="mb-8">
+            {% csrf_token %}
+            <div class="flex items-center rounded-lg overflow-hidden shadow-md bg-white">
+                <input type="text" name="q" placeholder="Search for posts" value="{{ query }}" 
+                       class="w-full px-4 py-3 focus:outline-none">
+                <button type="submit" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 transition duration-200">
+                    Search
+                </button>
+            </div>
+        </form>
+
+        {% if user.is_authenticated %}
+            {% for ps in post %}
+                <!-- Post Card -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6" data-post-id="{{ ps.id }}">
+                    <!-- Post Header with Profile -->
+                    <div class="p-4 border-b flex items-center">
+                        <!-- Profile Image -->
+                        <div class="w-10 h-10 rounded-full bg-gray-300 flex-shrink-0 overflow-hidden">
+                            {% if ps.user.profile_image %}
+                                <img src="{{ ps.user.profile_image.url }}" alt="Profile" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-gray-500">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <!-- Username and Post Time -->
+                        <div class="ml-3">
+                            <p class="font-medium text-gray-800">{{ ps.user.username }}</p>
+                            <p class="text-xs text-gray-500">{{ ps.created_at|date:"F j, Y" }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ ps.title }}</h3>
+                        <div class="ck-content text-gray-600 mb-4">
+                            {{ ps.description|safe }}
+                        </div>
+                    </div>
+
+                    <!-- Post Image -->
+                    {% if ps.image %}
+                        <div class="w-full aspect-video bg-gray-200 overflow-hidden">
+                            <img src="{{ ps.image.url }}" alt="Post Image" class="w-full h-full object-cover">
+                        </div>
+                    {% endif %}
+
+                    <!-- Post Actions -->
+                    <div class="p-4">
+                        <div class="flex items-center space-x-4 border-t border-b py-3 my-2">
+                            <!-- Like Button -->
+                            <button class="like-button flex items-center space-x-1 transition {% if request.user in ps.likes.all %}text-blue-600 active{% else %}text-gray-700 hover:text-blue-600{% endif %}" 
+                                    data-post-id="{{ ps.id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                                </svg>
+                                <span>{% if request.user in ps.likes.all %}Liked{% else %}Like{% endif %}</span>
+                            </button>
+                            <span class="like-count text-gray-600 text-sm">{{ ps.likes.count }} Likes</span>
+
+                            <!-- Dislike Button -->
+                            <button class="dislike-button flex items-center space-x-1 transition {% if request.user in ps.dislikes.all %}text-red-600 active{% else %}text-gray-700 hover:text-red-600{% endif %}" 
+                                    data-post-id="{{ ps.id }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" />
+                                </svg>
+                                <span>{% if request.user in ps.dislikes.all %}Disliked{% else %}Dislike{% endif %}</span>
+                            </button>
+                            <span class="dislike-count text-gray-600 text-sm">{{ ps.dislikes.count }} Dislikes</span>
+                        </div>
+
+                        <!-- Comment Form -->
+                        <div class="mt-4">
+                            <form class="comment-form space-y-3" data-post-id="{{ ps.id }}">
+                                {% csrf_token %}
+                                <textarea name="content" 
+                                          placeholder="Write your comment..." 
+                                          required
+                                          class="comment-content w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none h-20"></textarea>
+                                <button type="submit" 
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200">
+                                    Post Comment
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="mt-6">
+                            <button class="toggle-comments-btn text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                                <span class="comments-count-text">Show Comments ({{ ps.comments.count }})</span>
+                            </button>
+                            
+                            <div class="comments-list mt-4 space-y-4 pl-2 border-l-2 border-gray-200" style="display: none;">
+                                {% for comment in ps.comments.all %}
+                                    <div class="comment bg-gray-50 p-3 rounded-lg" data-comment-id="{{ comment.id }}">
+                                        <div class="flex items-center mb-2">
+                                            <!-- Comment User Profile -->
+                                            <div class="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0 overflow-hidden">
+                                                {% if comment.user.profile_image %}
+                                                    <img src="{{ comment.user.profile_image.url }}" alt="Profile" class="w-full h-full object-cover">
+                                                {% else %}
+                                                    <div class="w-full h-full flex items-center justify-center text-gray-500">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                        </svg>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="ml-2">
+                                                <p class="font-medium text-sm text-gray-800">{{ comment.user.username }}</p>
+                                                <p class="text-xs text-gray-500">{{ comment.created_at|date:"M j, Y" }} at {{ comment.created_at|time:"g:i A" }}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-gray-700 text-sm ml-10">{{ comment.content }}</p>
+                                        
+                                        {% if comment.user == user %}
+                                            <div class="mt-2 text-right">
+                                                <button class="delete-comment text-xs text-red-600 hover:text-red-800" data-comment-id="{{ comment.id }}">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="bg-white rounded-xl shadow-md p-8 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <p class="text-gray-600 mb-4">Please login to view and post comments.</p>
+                <a href="{% url 'login' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition duration-200">
+                    Login
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- CKEditor CSS -->
+<link rel="stylesheet" href="{% static 'ckeditor/ckeditor/contents.css' %}">
+
+<style>
+    /* CKEditor Content Styling */
+    .ck-content {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.6;
+        color: #374151;
+    }
+    
+    .ck-content p {
+        margin-bottom: 1rem;
+    }
+    
+    .ck-content strong {
+        font-weight: 600;
+    }
+    
+    .ck-content ul, .ck-content ol {
+        margin-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .ck-content li {
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Custom styling for CKEditor content */
+    .ck-content .text-highlight {
+        background-color: #fef3c7;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.25rem;
+    }
+    
+    /* Like/Dislike button active states */
+    .like-button.active {
+        color: #2563eb !important;
+    }
+    
+    .dislike-button.active {
+        color: #dc2626 !important;
+    }
+    
+    /* Comments toggle animation */
+    .comments-list {
+        transition: all 0.3s ease;
+    }
+    
+    /* New comment animation */
+    .new-comment {
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        const csrftoken = getCookie('csrftoken');
+
+        // Like button functionality
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.dataset.postId;
+                const likeCountElement = this.nextElementSibling;
+                const dislikeButton = this.parentElement.querySelector('.dislike-button');
+                const dislikeCountElement = dislikeButton.nextElementSibling;
+                
+                fetch(`/like_post/${postId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        this.classList.add('text-blue-600', 'active');
+                        this.querySelector('span').textContent = 'Liked';
+                        dislikeButton.classList.remove('text-red-600', 'active');
+                        dislikeButton.querySelector('span').textContent = 'Dislike';
+                    } else {
+                        this.classList.remove('text-blue-600', 'active');
+                        this.querySelector('span').textContent = 'Like';
+                    }
+                    likeCountElement.textContent = `${data.likes_count} Likes`;
+                    dislikeCountElement.textContent = `${data.dislikes_count} Dislikes`;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Dislike button functionality
+        document.querySelectorAll('.dislike-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = this.dataset.postId;
+                const dislikeCountElement = this.nextElementSibling;
+                const likeButton = this.parentElement.querySelector('.like-button');
+                const likeCountElement = likeButton.nextElementSibling;
+                
+                fetch(`/dislike_post/${postId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.disliked) {
+                        this.classList.add('text-red-600', 'active');
+                        this.querySelector('span').textContent = 'Disliked';
+                        likeButton.classList.remove('text-blue-600', 'active');
+                        likeButton.querySelector('span').textContent = 'Like';
+                    } else {
+                        this.classList.remove('text-red-600', 'active');
+                        this.querySelector('span').textContent = 'Dislike';
+                    }
+                    dislikeCountElement.textContent = `${data.dislikes_count} Dislikes`;
+                    likeCountElement.textContent = `${data.likes_count} Likes`;
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Comment form submission
+        document.querySelectorAll('.comment-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const postId = this.dataset.postId;
+                const content = this.querySelector('.comment-content').value;
+                const commentsList = this.closest('.p-4').querySelector('.comments-list');
+                const commentsCountText = this.closest('.p-4').querySelector('.comments-count-text');
+                
+                fetch(`/add_comment/${postId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ content: content }),
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Clear the textarea
+                        this.querySelector('.comment-content').value = '';
+                        
+                        // Create new comment element
+                        const newComment = document.createElement('div');
+                        newComment.className = 'comment bg-gray-50 p-3 rounded-lg new-comment';
+                        newComment.dataset.commentId = data.comment_id;
+                        
+                        // User profile image or default
+                        const profileImage = `{% if user.profile_image %}
+                            <img src="{{ user.profile_image.url }}" alt="Profile" class="w-full h-full object-cover">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-gray-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                        {% endif %}`;
+                        
+                        // Current time
+                        const now = new Date();
+                        const formattedDate = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        const formattedTime = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+                        
+                        newComment.innerHTML = `
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 rounded-full bg-gray-300 flex-shrink-0 overflow-hidden">
+                                    ${profileImage}
+                                </div>
+                                <div class="ml-2">
+                                    <p class="font-medium text-sm text-gray-800">${data.username}</p>
+                                    <p class="text-xs text-gray-500">${formattedDate} at ${formattedTime}</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-700 text-sm ml-10">${content}</p>
+                            <div class="mt-2 text-right">
+                                <button class="delete-comment text-xs text-red-600 hover:text-red-800" data-comment-id="${data.comment_id}">
+                                    Delete
+                                </button>
+                            </div>
+                        `;
+                        
+                        // Prepend new comment to comments list
+                        if (commentsList.children.length === 0) {
+                            commentsList.style.display = 'block';
+                            commentsList.appendChild(newComment);
+                        } else {
+                            commentsList.insertBefore(newComment, commentsList.firstChild);
+                        }
+                        
+                        // Update comments count
+                        const currentCount = parseInt(commentsCountText.textContent.match(/\d+/)[0]);
+                        commentsCountText.textContent = `Show Comments (${currentCount + 1})`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+
+        // Delete comment functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-comment')) {
+                const commentId = e.target.dataset.commentId;
+                const commentElement = e.target.closest('.comment');
+                const commentsCountText = commentElement.closest('.p-4').querySelector('.comments-count-text');
+                
+                fetch(`/delete_comment/${commentId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        commentElement.remove();
+                        // Update comments count
+                        const currentCount = parseInt(commentsCountText.textContent.match(/\d+/)[0]);
+                        commentsCountText.textContent = `Show Comments (${currentCount - 1})`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        // Comments toggle functionality
+        document.querySelectorAll('.toggle-comments-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentsList = this.nextElementSibling;
+                const svg = this.querySelector('svg');
+                
+                if (commentsList.style.display === 'none' || !commentsList.style.display) {
+                    commentsList.style.display = 'block';
+                    svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />';
+                } else {
+                    commentsList.style.display = 'none';
+                    svg.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

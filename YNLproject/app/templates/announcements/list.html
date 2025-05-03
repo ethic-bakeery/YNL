@@ -1,0 +1,86 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    {% if request.user.is_staff %}
+    <div class="flex justify-end mb-6">
+        <a href="{% url 'create_announcement' %}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+            <i class="fas fa-plus mr-2"></i> New Announcement
+        </a>
+    </div>
+    {% endif %}
+    
+    <div class="space-y-6">
+        {% for announcement in announcements %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+            {% if announcement.image %}
+            <div class="h-48 overflow-hidden">
+                <img src="{{ announcement.image.url }}" alt="{{ announcement.title }}" class="w-full h-full object-cover">
+            </div>
+            {% endif %}
+            
+            <div class="p-6">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">{{ announcement.title }}</h2>
+                    {% if request.user.is_staff %}
+                    <div class="flex space-x-2">
+                        <a href="{% url 'edit_announcement' announcement.pk %}" class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="{% url 'delete_announcement' announcement.pk %}" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Render rich text description using |safe -->
+                <div class="prose max-w-none text-gray-800 mb-4">
+                    {{ announcement.description|safe }}
+                </div>
+
+                <div class="flex items-center text-sm text-gray-500 mt-4">
+                    <i class="fas fa-user mr-1"></i>
+                    <span class="mr-4">{{ announcement.created_by.get_full_name|default:announcement.created_by.username }}</span>
+                    <i class="fas fa-clock mr-1"></i>
+                    <span>{{ announcement.created_at|date:"F j, Y, g:i a" }}</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-12">
+            <i class="fas fa-bullhorn text-4xl text-gray-400 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No announcements yet</h3>
+            <p class="mt-1 text-sm text-gray-500">Check back later for updates.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Announcement card styling */
+    .announcement-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .announcement-card:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Optional if not using Tailwind Typography plugin */
+    .prose ul {
+        list-style-type: disc;
+        padding-left: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .prose p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+    }
+
+    .prose strong {
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .room-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .room-header {
+            text-align: center;
+            background-color: #075e54;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .room-header h1 {
+            font-size: 24px;
+        }
+
+        .room-form {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .room-form input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 80%;
+        }
+
+        .room-form button {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .room-form button:hover {
+            background-color: #064d3d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="room-container">
+        <div class="room-header">
+            <h1>Create a New Chat Room</h1>
+        </div>
+        <form method="post" action="{% url 'create_room' %}" class="room-form">
+            {% csrf_token %}
+            <input type="text" name="room_name" placeholder="Enter room name..." required />
+            <button type="submit"><i class="fas fa-plus"></i> Create Room</button>
+        </form>
+    </div>
+</body>
+
+</html>

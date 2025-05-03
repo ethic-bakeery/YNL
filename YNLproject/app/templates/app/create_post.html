@@ -1,0 +1,88 @@
+{% extends 'app/user_navbar.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-10 bg-green-50 rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold text-green-800 mb-8 text-center">Create New Post</h1>
+
+    {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %} px-4 py-3 rounded-md mb-2 shadow-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+
+        <div>
+            <label for="id_title" class="block text-sm font-medium text-green-900 mb-1">Title</label>
+            {{ form.title|add_class:"w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400" }}
+            {% if form.title.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.title.errors.as_text }}</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="id_description" class="block text-sm font-medium text-green-900 mb-1">Description</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.description.errors.as_text }}</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="id_image" class="block text-sm font-medium text-green-900 mb-1">Image</label>
+            <div class="mt-1 flex items-center">
+                <label class="cursor-pointer">
+                    <span class="sr-only">Choose image</span>
+                    {{ form.image|add_class:"w-full px-4 py-2 border border-green-300 rounded-md shadow-sm" }}
+                </label>
+            </div>
+            {% if form.image.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ form.image.errors.as_text }}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Cancel
+            </a>
+            <button type="submit" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 shadow-sm transition">
+                <i class="fas fa-paper-plane mr-2"></i> Create Post
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- CKEditor Scripts -->
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
+
+<style>
+    /* Custom styling for CKEditor to match your theme */
+    .django-ckeditor-widget {
+        width: 100% !important;
+    }
+    
+    .cke_chrome {
+        border-radius: 0.375rem !important;
+        border-color: #d1fae5 !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    .cke_top {
+        background: #f0fdf4 !important;
+        border-bottom-color: #d1fae5 !important;
+    }
+    
+    .cke_bottom {
+        background: #f0fdf4 !important;
+        border-top-color: #d1fae5 !important;
+    }
+</style>
+{% endblock %}

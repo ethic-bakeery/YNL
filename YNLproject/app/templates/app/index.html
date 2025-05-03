@@ -1,0 +1,633 @@
+{% extends 'home/base.html' %}
+
+{% block extra_css %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Makers Alliance | Together We Make Change</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-primary-600 font-bold text-xl">ChangeAlliance</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-primary-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Home
+                        </a>
+                        <a href="#about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            About Us
+                        </a>
+                        <a href="#causes" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Our Causes
+                        </a>
+                        <a href="#events" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Events
+                        </a>
+                        <a href="#join" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Get Involved
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <button class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300">
+                        Donate Now
+                    </button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    Mobile menu button
+                    <button type="button" class="mobile-menu-button inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Mobile menu, show/hide based on menu state. -->
+        <div class="mobile-menu hidden sm:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="#" class="bg-primary-50 border-primary-500 text-primary-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Home
+                </a>
+                <a href="#about" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    About Us
+                </a>
+                <a href="#causes" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Our Causes
+                </a>
+                <a href="#events" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Events
+                </a>
+                <a href="#join" class="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Get Involved
+                </a>
+                <div class="pt-4 pb-3 border-t border-gray-200">
+                    <a href="#" class="block text-center mx-4 py-2 rounded-md text-base font-medium text-white bg-primary-500 hover:bg-primary-600">
+                        Donate Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative bg-gray-900">
+        <div class="absolute inset-0 overflow-hidden">
+            <img src="https://source.unsplash.com/random/1920x1080/?activism,protest" alt="Activism background" class="w-full h-full object-cover opacity-40">
+        </div>
+        <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Welcome to the Movement</h1>
+            <p class="mt-6 text-xl text-gray-100 max-w-3xl">Together, we're building a more just, sustainable, and equitable world. Join thousands of activists making real change happen in communities everywhere.</p>
+            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                <a href="#join" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 transition-colors duration-300">
+                    Join Us Today
+                </a>
+                <a href="#about" class="inline-flex items-center justify-center px-5 py-3 border border-white text-base font-medium rounded-md text-white hover:bg-white hover:bg-opacity-10 transition-colors duration-300">
+                    Learn More
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Impact Stats -->
+    <div class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 gap-5 sm:grid-cols-4">
+                <div class="text-center">
+                    <span class="text-4xl font-bold text-primary-600">10K+</span>
+                    <p class="mt-2 text-lg font-medium text-gray-600">Activists</p>
+                </div>
+                <div class="text-center">
+                    <span class="text-4xl font-bold text-primary-600">50+</span>
+                    <p class="mt-2 text-lg font-medium text-gray-600">Communities</p>
+                </div>
+                <div class="text-center">
+                    <span class="text-4xl font-bold text-primary-600">100+</span>
+                    <p class="mt-2 text-lg font-medium text-gray-600">Campaigns</p>
+                </div>
+                <div class="text-center">
+                    <span class="text-4xl font-bold text-primary-600">25+</span>
+                    <p class="mt-2 text-lg font-medium text-gray-600">Policy Wins</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                        Our Mission
+                    </h2>
+                    <p class="mt-4 text-lg text-gray-600">
+                        We believe in the power of collective action to create meaningful change. Since 2010, our grassroots movement has been fighting for social justice, environmental protection, and human rights.
+                    </p>
+                    <p class="mt-4 text-lg text-gray-600">
+                        Our community of activists, volunteers, and supporters work together to challenge unjust systems and build a more equitable future for all. Through advocacy, education, and direct action, we've achieved significant victories and continue to grow our impact.
+                    </p>
+                    <div class="mt-8">
+                        <a href="#" class="text-primary-600 hover:text-primary-700 font-medium flex items-center">
+                            Read our full story
+                            <i class='bx bx-right-arrow-alt ml-2'></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0">
+                    <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
+                        <img src="https://source.unsplash.com/random/800x600/?community,activism" alt="Community action" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Causes -->
+    <section id="causes" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Our Key Causes
+                </h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 lg:mx-auto">
+                    We focus our efforts where we can make the most impact.
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Cause 1 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="h-48 w-full overflow-hidden">
+                        <img src="https://source.unsplash.com/random/600x400/?climate" alt="Climate Justice" class="w-full h-full object-cover">
+                    </div>
+                    <div class="px-6 py-5">
+                        <h3 class="text-xl font-semibold text-gray-900">Climate Justice</h3>
+                        <p class="mt-2 text-base text-gray-600">Fighting for policies that address climate change and protect vulnerable communities from its impacts.</p>
+                        <div class="mt-4">
+                            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">Learn more →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cause 2 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="h-48 w-full overflow-hidden">
+                        <img src="https://source.unsplash.com/random/600x400/?equality" alt="Racial Justice" class="w-full h-full object-cover">
+                    </div>
+                    <div class="px-6 py-5">
+                        <h3 class="text-xl font-semibold text-gray-900">Racial Justice</h3>
+                        <p class="mt-2 text-base text-gray-600">Working to dismantle systemic racism and build more equitable institutions and communities.</p>
+                        <div class="mt-4">
+                            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">Learn more →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cause 3 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg">
+                    <div class="h-48 w-full overflow-hidden">
+                        <img src="https://source.unsplash.com/random/600x400/?education" alt="Education Access" class="w-full h-full object-cover">
+                    </div>
+                    <div class="px-6 py-5">
+                        <h3 class="text-xl font-semibold text-gray-900">Education Access</h3>
+                        <p class="mt-2 text-base text-gray-600">Advocating for equal access to quality education and resources for all communities.</p>
+                        <div class="mt-4">
+                            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">Learn more →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section id="events" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Upcoming Events
+                </h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-600 lg:mx-auto">
+                    Join us at these upcoming events and actions.
+                </p>
+            </div>
+
+            <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Event 1 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg transition-transform duration-300 hover:transform hover:scale-105">
+                    <div class="px-6 py-5">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                Community Event
+                            </span>
+                            <span class="text-sm text-gray-500">May 15, 2025</span>
+                        </div>
+                        <h3 class="mt-3 text-xl font-semibold text-gray-900">Community Clean-Up Day</h3>
+                        <p class="mt-2 text-base text-gray-600">Join us for a day of community service as we clean up local parks and waterways.</p>
+                        <div class="mt-4 flex items-center text-sm text-gray-600">
+                            <i class='bx bx-map text-primary-500 mr-2'></i>
+                            <span>Riverside Park, 10:00 AM - 2:00 PM</span>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700">
+                                Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg transition-transform duration-300 hover:transform hover:scale-105">
+                    <div class="px-6 py-5">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                Workshop
+                            </span>
+                            <span class="text-sm text-gray-500">May 22, 2025</span>
+                        </div>
+                        <h3 class="mt-3 text-xl font-semibold text-gray-900">Advocacy Training Workshop</h3>
+                        <p class="mt-2 text-base text-gray-600">Learn effective advocacy techniques to influence policy and create change.</p>
+                        <div class="mt-4 flex items-center text-sm text-gray-600">
+                            <i class='bx bx-map text-primary-500 mr-2'></i>
+                            <span>Community Center, 6:00 PM - 8:00 PM</span>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700">
+                                Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="bg-white overflow-hidden shadow rounded-lg transition-transform duration-300 hover:transform hover:scale-105">
+                    <div class="px-6 py-5">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                                Rally
+                            </span>
+                            <span class="text-sm text-gray-500">June 5, 2025</span>
+                        </div>
+                        <h3 class="mt-3 text-xl font-semibold text-gray-900">Climate Action Rally</h3>
+                        <p class="mt-2 text-base text-gray-600">Stand with us as we demand meaningful action on climate change from our leaders.</p>
+                        <div class="mt-4 flex items-center text-sm text-gray-600">
+                            <i class='bx bx-map text-primary-500 mr-2'></i>
+                            <span>City Hall Plaza, 12:00 PM - 3:00 PM</span>
+                        </div>
+                        <div class="mt-4">
+                            <a href="#" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700">
+                                Register Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="#" class="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    View All Events
+                    <i class='bx bx-right-arrow-alt ml-2'></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                    Voices from Our Community
+                </h2>
+            </div>
+
+            <div class="mt-12 max-w-lg mx-auto grid gap-8 lg:grid-cols-3 lg:max-w-none">
+                <!-- Testimonial 1 -->
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                        <div class="flex-1">
+                            <p class="text-xl font-medium text-gray-900">
+                                <i class='bx bxs-quote-alt-left text-primary-300 mr-2'></i>
+                                Being part of this movement has given me hope and a sense of purpose. Together, we're making real change happen in our community.
+                            </p>
+                            <div class="mt-6 flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/150?img=32" alt="Testimonial author">
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Sarah Johnson</p>
+                                    <p class="text-sm text-gray-500">Volunteer since 2020</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                        <div class="flex-1">
+                            <p class="text-xl font-medium text-gray-900">
+                                <i class='bx bxs-quote-alt-left text-primary-300 mr-2'></i>
+                                I've seen firsthand how grassroots organizing can lead to policy change. This organization provides the tools and support to make it happen.
+                            </p>
+                            <div class="mt-6 flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/150?img=68" alt="Testimonial author">
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Marcus Lee</p>
+                                    <p class="text-sm text-gray-500">Community Organizer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                        <div class="flex-1">
+                            <p class="text-xl font-medium text-gray-900">
+                                <i class='bx bxs-quote-alt-left text-primary-300 mr-2'></i>
+                                The training and resources provided have empowered me to become an effective advocate for change in my own neighborhood.
+                            </p>
+                            <div class="mt-6 flex items-center">
+                                <div class="flex-shrink-0">
+                                    <img class="h-10 w-10 rounded-full" src="https://i.pravatar.cc/150?img=47" alt="Testimonial author">
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Elena Rodriguez</p>
+                                    <p class="text-sm text-gray-500">Member since 2019</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join Us Section -->
+    <section id="join" class="py-16 bg-primary-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                        Join Our Movement
+                    </h2>
+                    <p class="mt-4 text-lg text-primary-100">
+                        There are many ways to get involved and make a difference. Whether you have a little time or a lot, your contribution matters.
+                    </p>
+                    <div class="mt-8 space-y-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class='bx bx-check-circle text-2xl text-primary-300'></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-medium text-white">Become a Member</h3>
+                                <p class="mt-1 text-primary-100">Join our community and get access to resources, training, and events.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class='bx bx-check-circle text-2xl text-primary-300'></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-medium text-white">Volunteer</h3>
+                                <p class="mt-1 text-primary-100">Contribute your time and skills to our campaigns and events.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class='bx bx-check-circle text-2xl text-primary-300'></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-medium text-white">Donate</h3>
+                                <p class="mt-1 text-primary-100">Support our work with a one-time or recurring donation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                        <div class="px-6 py-8">
+                            <h3 class="text-2xl font-bold text-gray-900">Sign Up Today</h3>
+                            <p class="mt-2 text-gray-600">Join thousands of activists making change happen.</p>
+                            <form class="mt-6 space-y-4">
+                                <div>
+                                    <label for="full-name" class="sr-only">Full name</label>
+                                    <input type="text" name="full-name" id="full-name" class="block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md" placeholder="Full name">
+                                </div>
+                                <div>
+                                    <label for="email-address" class="sr-only">Email address</label>
+                                    <input type="email" name="email-address" id="email-address" class="block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md" placeholder="Email address">
+                                </div>
+                                <div>
+                                    <label for="phone" class="sr-only">Phone number</label>
+                                    <input type="tel" name="phone" id="phone" class="block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md" placeholder="Phone number (optional)">
+                                </div>
+                                <div>
+                                    <label for="interests" class="sr-only">Areas of interest</label>
+                                    <select id="interests" name="interests" class="block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm border-gray-300 rounded-md">
+                                        <option value="">Area of interest</option>
+                                        <option value="climate">Climate Justice</option>
+                                        <option value="racial">Racial Justice</option>
+                                        <option value="education">Education Access</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                        Join the Movement
+                                    </button>
+                                </div>
+                            </form>
+                            <p class="mt-4 text-xs text-gray-500 text-center">
+                                By signing up, you agree to our Privacy Policy and Terms of Service.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="px-6 py-6 bg-primary-600 rounded-lg md:py-12 md:px-12 lg:py-16 lg:px-16 xl:flex xl:items-center">
+                <div class="xl:w-0 xl:flex-1">
+                    <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                        Stay informed with our newsletter
+                    </h2>
+                    <p class="mt-3 max-w-3xl text-lg leading-6 text-primary-100">
+                        Get updates on our campaigns, events, and ways to take action.
+                    </p>
+                </div>
+                <div class="mt-8 sm:w-full sm:max-w-md xl:mt-0 xl:ml-8">
+                    <form class="sm:flex">
+                        <label for="email-address" class="sr-only">Email address</label>
+                        <input id="email-address" name="email-address" type="email" autocomplete="email" required class="w-full rounded-md border-white px-5 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-700" placeholder="Enter your email">
+                        <button type="submit" class="mt-3 flex w-full items-center justify-center rounded-md border border-transparent bg-primary-800 px-5 py-3 text-base font-medium text-white shadow hover:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-700 sm:mt-0 sm:ml-3 sm:w-auto sm:flex-shrink-0">
+                            Subscribe
+                        </button>
+                    </form>
+                    <p class="mt-3 text-sm text-primary-100">
+                        We care about your data. Read our <a href="#" class="font-medium text-white underline">Privacy Policy</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="text-white font-bold text-xl">ChangeAlliance</span>
+                    <p class="mt-4 text-base text-gray-400">
+                        Building a more just, sustainable, and equitable world through collective action and community power.
+                    </p>
+                    <div class="mt-6 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class='bx bxl-facebook text-xl'></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class='bx bxl-twitter text-xl'></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class='bx bxl-instagram text-xl'></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class='bx bxl-youtube text-xl'></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">
+                        Resources
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                Blog
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                Reports
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                Press
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="text-base text-gray-400 hover:text-white">
+                                Toolkit
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-300 tracking-wider uppercase">
+                        Contact
+                    </h3>
+                    <ul class="mt-4 space-y-4">
+                        <li class="flex">
+                            <i class='bx bx-map text-gray-400 mr-2'></i>
+                            <span class="text-gray-400">123 Change Ave, Activism City, AC 12345</span>
+                        </li>
+                        <li class="flex">
+                            <i class='bx bx-phone text-gray-400 mr-2'></i>
+                            <a href="tel:+15551234567" class="text-gray-400 hover:text-white">(555) 123-4567</a>
+                        </li>
+                        <li class="flex">
+                            <i class='bx bx-envelope text-gray-400 mr-2'></i>
+                            <a href="mailto:info@changealliance.org" class="text-gray-400 hover:text-white">info@changealliance.org</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-800 pt-8">
+                <p class="text-base text-gray-400 text-center">
+                    &copy; 2025 ChangeAlliance. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on a link
+        const mobileLinks = document.querySelectorAll('.mobile-menu a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

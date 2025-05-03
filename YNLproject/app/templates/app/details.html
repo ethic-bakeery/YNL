@@ -1,0 +1,192 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.title }} - Event Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-12 max-w-6xl">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="{% url 'event-detail' %}" class="inline-flex items-center text-primary-600 hover:text-primary-800 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Events
+            </a>
+        </div>
+
+        <!-- Event Details Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Event Image -->
+            {% if event.image %}
+                <div class="w-full h-64 md:h-80 overflow-hidden">
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-full object-cover">
+                </div>
+            {% else %}
+                <div class="w-full h-64 md:h-80 bg-gradient-to-r from-primary-400 to-primary-600 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-white opacity-75" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+            {% endif %}
+            
+            <!-- Event Content -->
+            <div class="p-6 md:p-8">
+                <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
+                    <!-- Main Details -->
+                    <div class="flex-grow">
+                        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ event.title }}</h1>
+                        
+                        <!-- Date and Time -->
+                        <div class="flex items-start mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Date & Time</h3>
+                                <p class="text-gray-600">
+                                    <span class="font-medium">From:</span> {{ event.start_time|date:"F j, Y, g:i a" }}
+                                </p>
+                                <p class="text-gray-600">
+                                    <span class="font-medium">To:</span> {{ event.end_time|date:"F j, Y, g:i a" }}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Location -->
+                        <div class="flex items-start mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Location</h3>
+                                <p class="text-gray-600">{{ event.location }}</p>
+                                {% if event.address %}
+                                <p class="text-gray-500 text-sm mt-1">{{ event.address }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Organizer -->
+                        {% if event.organizer %}
+                        <div class="flex items-start mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            <div class="ml-3">
+                                <h3 class="text-lg font-semibold text-gray-700 mb-1">Organizer</h3>
+                                <p class="text-gray-600">{{ event.organizer }}</p>
+                                {% if event.organizer_contact %}
+                                <p class="text-gray-500 text-sm mt-1">{{ event.organizer_contact }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Sidebar with Action Buttons -->
+                    <div class="md:w-64 flex-shrink-0">
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <!-- Event Status -->
+                            <div class="mb-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800">
+                                    {% if event.is_upcoming %}
+                                        Upcoming
+                                    {% else %}
+                                        Past Event
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            <!-- Price -->
+                            {% if event.price %}
+                            <div class="mb-4">
+                                <h4 class="text-sm font-medium text-gray-500 mb-1">Price</h4>
+                                <p class="text-2xl font-bold text-gray-800">${{ event.price }}</p>
+                            </div>
+                            {% else %}
+                            <div class="mb-4">
+                                <h4 class="text-sm font-medium text-gray-500 mb-1">Price</h4>
+                                <p class="text-xl font-bold text-primary-600">Free</p>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Register Button -->
+                            <a href="{% url 'register' %}" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg shadow-sm transition duration-200 mb-3 text-center block">
+                                Register Now
+                            </a>
+                            
+                            
+                            <!-- Share Button -->
+                            <button class="w-full bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-4 rounded-lg border border-gray-300 shadow-sm transition duration-200 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Full Description -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">About This Event</h2>
+                    <div class="prose max-w-none text-gray-600">
+                        {{ event.description|linebreaks }}
+                    </div>
+                </div>
+                
+                <!-- Additional Info -->
+                {% if event.additional_info %}
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Additional Information</h2>
+                    <div class="prose max-w-none text-gray-600">
+                        {{ event.additional_info|linebreaks }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Event ID -->
+                <div class="mt-8 pt-6 border-t border-gray-200 text-sm text-gray-500">
+                    <p>Event ID: <span class="font-mono">{{ event.id }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

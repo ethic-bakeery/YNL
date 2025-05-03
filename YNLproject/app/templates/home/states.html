@@ -1,0 +1,158 @@
+{% extends 'app/user_navbar.html' %}
+{% block content %}
+<div class="bg-gray-100 min-h-screen flex flex-col items-center py-10">
+    <h1 class="text-4xl font-bold text-blue-900 mb-10 text-center">
+        Please select your state to view the members
+    </h1>
+      
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl px-4">
+        <a href="{% url 'state_team' state_name='Abia' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Abia</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Adamawa' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Adamawa</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Akwa Ibom' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Akwa Ibom</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Anambra' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Anambra</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Bauchi' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Bauchi</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Bayelsa' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Bayelsa</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Benue' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Benue</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Borno' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Borno</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Cross River' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Cross River</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Delta' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Delta</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Ebonyi' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Ebonyi</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Edo' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Edo</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Ekiti' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Ekiti</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Enugu' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Enugu</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Gombe' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Gombe</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Imo' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Imo</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Jigawa' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Jigawa</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Kaduna' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Kaduna</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Kano' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Kano</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Katsina' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Katsina</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Kebbi' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Kebbi</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Kogi' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Kogi</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Kwara' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Kwara</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Lagos' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Lagos</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Nasarawa' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Nasarawa</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Niger' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Niger</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Ogun' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Ogun</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Ondo' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Ondo</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Osun' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Osun</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Oyo' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Oyo</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Plateau' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Plateau</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Rivers' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Rivers</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Sokoto' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Sokoto</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Taraba' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Taraba</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Yobe' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Yobe</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Zamfara' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Zamfara</h2>
+        </a>
+
+        <a href="{% url 'state_team' state_name='Federal Capital Territory (FCT)' %}" class="bg-white shadow-md hover:shadow-lg rounded-lg p-6 text-center cursor-pointer transition transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-800">Federal Capital Territory (FCT)</h2>
+        </a>
+    </div>
+</div>
+{% endblock %}

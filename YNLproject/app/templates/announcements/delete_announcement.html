@@ -1,0 +1,28 @@
+{% extends 'app/user_navbar.html' %}
+
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-red-600 to-red-800 px-6 py-6 text-center">
+            <h1 class="text-2xl font-bold text-white">Delete Announcement</h1>
+        </div>
+        
+        <div class="px-6 py-8 sm:p-8">
+            <p class="text-lg text-gray-700 mb-6">Are you sure you want to delete the announcement <strong>"{{ announcement.title }}"</strong>?</p>
+            
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                <div class="flex justify-end space-x-4 pt-6">
+                    <a href="{% url 'announcements_list' %}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Delete Announcement
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

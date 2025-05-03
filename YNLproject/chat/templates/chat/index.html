@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <link rel="stylesheet" href="{% static 'chat/style.css' %}">
+</head>
+<body>
+    <div id="chat-container">
+        <div id="id_chat_item_container" class="chat-container"></div>
+        <div id="typing-notification" style="display: none; color: #888;">Typing...</div>
+        <input type="file" id="voice-file" accept="audio/*" style="display: none;">
+        <button id="voice-record-button">Record Voice</button>
+        <textarea id="id_message_send_input" placeholder="Type your message here..."></textarea>
+        <button id="send-button">Send</button>
+    </div>
+
+    <script src="{% static 'chat/chat.js' %}"></script>
+</body>
+</html>

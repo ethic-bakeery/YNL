@@ -1,0 +1,132 @@
+{% extends 'app/user_navbar.html' %}
+
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Manage Announcements</h1>
+        <a href="{% url 'create_announcement' %}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition duration-300">
+            <i class="fas fa-plus mr-2"></i> New Announcement
+        </a>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <!-- Table Header -->
+        <div class="grid grid-cols-12 bg-gray-100 px-6 py-4 font-medium text-gray-700">
+            <div class="col-span-4">Title</div>
+            <div class="col-span-3">Created By</div>
+            <div class="col-span-3">Date Created</div>
+            <div class="col-span-1">Status</div>
+            <div class="col-span-1 text-right">Actions</div>
+        </div>
+
+        <!-- Announcements List -->
+        {% for announcement in announcements %}
+        <div class="grid grid-cols-12 px-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition duration-200">
+            <!-- Title with optional image preview -->
+            <div class="col-span-4 flex items-center">
+                {% if announcement.image %}
+                <div class="mr-3 flex-shrink-0">
+                    <img src="{{ announcement.image.url }}" alt="{{ announcement.title }}" class="h-10 w-10 rounded-md object-cover">
+                </div>
+                {% endif %}
+                <div>
+                    <h3 class="font-medium text-gray-800">{{ announcement.title }}</h3>
+                    <p class="text-sm text-gray-500 truncate">{{ announcement.description|truncatechars:50 }}</p>
+                </div>
+            </div>
+
+            <!-- Created By -->
+            <div class="col-span-3 flex items-center text-gray-600">
+                <i class="fas fa-user mr-2 text-gray-400"></i>
+                {{ announcement.created_by.get_full_name|default:announcement.created_by.username }}
+            </div>
+
+            <!-- Date Created -->
+            <div class="col-span-3 flex items-center text-gray-600">
+                <i class="fas fa-calendar-alt mr-2 text-gray-400"></i>
+                {{ announcement.created_at|date:"M j, Y" }}
+            </div>
+
+            <!-- Status -->
+            <div class="col-span-1 flex items-center">
+                <span class="px-2 py-1 text-xs rounded-full 
+                    {% if announcement.is_active %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {% if announcement.is_active %}Active{% else %}Inactive{% endif %}
+                </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="col-span-1 flex justify-end space-x-2">
+                <a href="{% url 'edit_announcement' announcement.pk %}" 
+                   class="text-blue-600 hover:text-blue-800 p-2 rounded-full hover:bg-blue-50 transition duration-200"
+                   title="Edit">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <a href="{% url 'delete_announcement' announcement.pk %}" 
+                   class="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-50 transition duration-200"
+                   title="Delete">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="px-6 py-12 text-center">
+            <i class="fas fa-bullhorn text-4xl text-gray-400 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No announcements found</h3>
+            <p class="mt-1 text-sm text-gray-500">Create your first announcement to get started.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <div class="mt-6 flex justify-center">
+        <nav class="inline-flex rounded-md shadow">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="px-3 py-2 border-t border-b border-gray-300 bg-blue-500 text-white">
+                    {{ num }}
+                </span>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}" class="px-3 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                    {{ num }}
+                </a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Hover effect for table rows */
+    .hover\:bg-gray-50:hover {
+        background-color: #f9fafb;
+    }
+    
+    /* Smooth transitions for interactive elements */
+    .transition {
+        transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+    }
+    
+    /* Ensure proper spacing for action buttons */
+    .rounded-full {
+        border-radius: 9999px;
+    }
+</style>
+{% endblock %}

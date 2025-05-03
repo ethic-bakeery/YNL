@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ group.name }} Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #chat-container {
+            height: 500px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 70%;
+        }
+        .sent {
+            background: #0084ff;
+            color: white;
+            margin-left: auto;
+        }
+        .received {
+            background: #e4e6eb;
+            color: black;
+            margin-right: auto;
+        }
+        .sender-name {
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+        .timestamp {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 3px;
+        }
+        #message-form {
+            display: flex;
+            gap: 10px;
+        }
+        #message-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        #send-button {
+            padding: 8px 15px;
+            background: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #status {
+            margin-bottom: 10px;
+            font-style: italic;
+            color: #666;
+        }
+        .empty-chat {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ group.name }} Chat</h1>
+    <div id="status">Connecting...</div>
+    
+    <div id="chat-container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                    <div class="sender-name">{{ message.sender.username }}</div>
+                    <div class="message-content">{{ message.content }}</div>
+                    <div class="timestamp">{{ message.timestamp|date:"M j, Y H:i" }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-chat">No messages yet. Be the first to send one!</div>
+        {% endif %}
+    </div>
+    
+    {% if is_member %}
+        <form id="message-form">
+            <input type="text" id="message-input" placeholder="Type your message" autocomplete="off">
+            <button type="submit" id="send-button">Send</button>
+        </form>
+    {% else %}
+        <div class="alert alert-warning">
+            You must join the group to send messages.
+        </div>
+    {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socket = new WebSocket(
+                'ws://' + window.location.host + '/ws/chat/{{ group.id }}/'
+            );
+            const chatContainer = document.getElementById('chat-container');
+            const messageForm = document.getElementById('message-form');
+            const messageInput = document.getElementById('message-input');
+            const statusDiv = document.getElementById('status');
+            
+            // Function to add a message to the chat container
+            function addMessage(message, sender, timestamp, isCurrentUser) {
+                // Remove empty state if it exists
+                const emptyState = chatContainer.querySelector('.empty-chat');
+                if (emptyState) {
+                    emptyState.remove();
+                }
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = isCurrentUser ? 'message sent' : 'message received';
+                
+                const timestampStr = new Date(timestamp).toLocaleString();
+                
+                messageDiv.innerHTML = `
+                    <div class="sender-name">${sender}</div>
+                    <div class="message-content">${message}</div>
+                    <div class="timestamp">${timestampStr}</div>
+                `;
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            // Load previous messages when page loads
+            function loadPreviousMessages() {
+                fetch(`/chat/get_messages/{{ group.id }}/`)
+                    .then(response => response.json())
+                    .then(messages => {
+                        messages.forEach(msg => {
+                            const isCurrentUser = msg.sender === "{{ request.user.username }}";
+                            addMessage(msg.content, msg.sender, msg.timestamp, isCurrentUser);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error loading previous messages:', error);
+                    });
+            }
+            
+            // Call this when the page loads
+            loadPreviousMessages();
+            
+            socket.onopen = function(e) {
+                console.log('Connection established');
+                statusDiv.textContent = 'Connected';
+            };
+            
+            socket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                console.log('Message received:', data);
+                
+                const isCurrentUser = data.sender === "{{ request.user.username }}";
+                addMessage(data.message, data.sender, data.timestamp, isCurrentUser);
+            };
+            
+            socket.onclose = function(e) {
+                console.log('Connection closed');
+                statusDiv.textContent = 'Disconnected - attempting to reconnect...';
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            };
+            
+            socket.onerror = function(e) {
+                console.error('WebSocket error:', e);
+                statusDiv.textContent = 'Connection error';
+            };
+            
+            if (messageForm) {
+                messageForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const message = messageInput.value.trim();
+                    if (message) {
+                        socket.send(JSON.stringify({
+                            'message': message,
+                            'sender': '{{ request.user.username }}',
+                            'group_id': '{{ group.id }}'
+                        }));
+                        messageInput.value = '';
+                    }
+                });
+            }
+            
+            // Auto-scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        });
+    </script>
+</body>
+</html>

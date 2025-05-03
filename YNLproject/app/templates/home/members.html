@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lagos State Team Structure</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .org-line {
+      position: absolute;
+      background-color: #e5e7eb;
+      z-index: 0;
+    }
+    .org-line-vertical {
+      width: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .org-line-horizontal {
+      height: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 p-4">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-2xl font-bold mb-6 text-center">Lagos State Team Structure</h1>
+
+    <div class="relative">
+      <!-- Lead Coordinator -->
+      <div class="flex justify-center mb-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 relative z-10 w-64 text-center hover:shadow-md transition-shadow">
+          <img 
+            src="" 
+            alt="Lagos Coordinator" 
+            class="w-16 h-16 rounded-full mx-auto object-cover border-2 border-gray-100"
+            onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Coord&background=4f46e5&color=fff'"
+          >
+          <h2 class="text-lg font-semibold mt-2">Lagos Coordinator</h2>
+          <p class="text-sm text-indigo-600">State Lead Coordinator</p>
+          <p class="text-xs text-gray-500 mt-1">lagos.coord@example.com</p>
+          <div class="mt-2 text-xs">
+            <span class="inline-block bg-gray-100 rounded-full px-2 py-1 text-gray-700">Lagos</span>
+            <span class="inline-block bg-indigo-100 rounded-full px-2 py-1 text-indigo-700 ml-1">state</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connecting Line -->
+      <div class="org-line org-line-vertical top-[80px] h-16"></div>
+
+      <!-- Assistant Coordinators -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 relative">
+        <!-- Connecting Lines -->
+        <div class="org-line org-line-horizontal left-[16.67%] right-[83.33%] top-0 hidden md:block"></div>
+        <div class="org-line org-line-horizontal left-[16.67%] right-[16.67%] top-0 hidden md:block"></div>
+        <div class="org-line org-line-vertical left-[16.67%] top-0 h-4 hidden md:block"></div>
+        <div class="org-line org-line-vertical left-[50%] top-0 h-4 hidden md:block"></div>
+        <div class="org-line org-line-vertical left-[83.33%] top-0 h-4 hidden md:block"></div>
+
+        <!-- Assistant 1 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 relative z-10 hover:shadow-md transition-shadow">
+          <div class="flex flex-col items-center text-center">
+            <img 
+              src="" 
+              alt="Lagos Assistant 1" 
+              class="w-14 h-14 rounded-full object-cover border border-gray-200"
+              onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Asst1&background=818cf8&color=fff'"
+            >
+            <h3 class="font-medium mt-2">Lagos Assistant 1</h3>
+            <p class="text-xs text-indigo-600">Assistant Coordinator</p>
+            <p class="text-xs text-gray-500 mt-1">lagos.asst1@example.com</p>
+            <div class="mt-1 text-xs">
+              <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+              <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assistant 2 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 relative z-10 hover:shadow-md transition-shadow">
+          <div class="flex flex-col items-center text-center">
+            <img 
+              src="" 
+              alt="Lagos Assistant 2" 
+              class="w-14 h-14 rounded-full object-cover border border-gray-200"
+              onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Asst2&background=818cf8&color=fff'"
+            >
+            <h3 class="font-medium mt-2">Lagos Assistant 2</h3>
+            <p class="text-xs text-indigo-600">Assistant Coordinator</p>
+            <p class="text-xs text-gray-500 mt-1">lagos.asst2@example.com</p>
+            <div class="mt-1 text-xs">
+              <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+              <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assistant 3 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 relative z-10 hover:shadow-md transition-shadow">
+          <div class="flex flex-col items-center text-center">
+            <img 
+              src="" 
+              alt="Lagos Assistant 3" 
+              class="w-14 h-14 rounded-full object-cover border border-gray-200"
+              onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Asst3&background=818cf8&color=fff'"
+            >
+            <h3 class="font-medium mt-2">Lagos Assistant 3</h3>
+            <p class="text-xs text-indigo-600">Assistant Coordinator</p>
+            <p class="text-xs text-gray-500 mt-1">lagos.asst3@example.com</p>
+            <div class="mt-1 text-xs">
+              <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+              <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Media & PR Team -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+          <h4 class="text-xs font-semibold uppercase text-gray-500 mb-3 border-b pb-2">Media & Public Relations</h4>
+          <div class="space-y-4">
+            <!-- Media 1 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Media1&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Media 1</p>
+                <p class="text-xs text-indigo-600">Media & Public Relations</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.media1@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Media 2 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Media2&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Media 2</p>
+                <p class="text-xs text-indigo-600">Media & Public Relations</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.media2@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Media 3 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Media3&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Media 3</p>
+                <p class="text-xs text-indigo-600">Media & Public Relations</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.media3@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legal Team -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+          <h4 class="text-xs font-semibold uppercase text-gray-500 mb-3 border-b pb-2">Legal & Policy Advisors</h4>
+          <div class="space-y-4">
+            <!-- Legal 1 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Legal1&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Legal 1</p>
+                <p class="text-xs text-indigo-600">Legal & Policy Advisor</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.legal1@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Legal 2 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Legal2&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Legal 2</p>
+                <p class="text-xs text-indigo-600">Legal & Policy Advisor</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.legal2@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Team -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+          <h4 class="text-xs font-semibold uppercase text-gray-500 mb-3 border-b pb-2">Event & Mobilization Officers</h4>
+          <div class="space-y-4">
+            <!-- Event 1 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Event1&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Event 1</p>
+                <p class="text-xs text-indigo-600">Event & Mobilization Officer</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.event1@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 2 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Event2&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Event 2</p>
+                <p class="text-xs text-indigo-600">Event & Mobilization Officer</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.event2@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 3 -->
+            <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+              <img 
+                src="" 
+                class="w-12 h-12 rounded-full object-cover border border-gray-200"
+                onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Event3&background=ddd6fe&color=5b21b6'"
+              >
+              <div class="mt-2">
+                <p class="text-sm font-medium">Lagos Event 3</p>
+                <p class="text-xs text-indigo-600">Event & Mobilization Officer</p>
+                <p class="text-xs text-gray-500 mt-1">lagos.event3@example.com</p>
+                <div class="mt-1 text-xs">
+                  <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                  <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Team -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 max-w-md mx-auto hover:shadow-md transition-shadow">
+        <h4 class="text-xs font-semibold uppercase text-gray-500 mb-3 border-b pb-2">Security & Risk Team</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Security 1 -->
+          <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+            <img 
+              src="" 
+              class="w-12 h-12 rounded-full object-cover border border-gray-200"
+              onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Sec1&background=ddd6fe&color=5b21b6'"
+            >
+            <div class="mt-2">
+              <p class="text-sm font-medium">Lagos Security 1</p>
+              <p class="text-xs text-indigo-600">Security & Risk Team</p>
+              <p class="text-xs text-gray-500 mt-1">lagos.sec1@example.com</p>
+              <div class="mt-1 text-xs">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Security 2 -->
+          <div class="flex flex-col items-center text-center p-2 hover:bg-gray-50 rounded">
+            <img 
+              src="" 
+              class="w-12 h-12 rounded-full object-cover border border-gray-200"
+              onerror="this.src='https://ui-avatars.com/api/?name=Lagos+Sec2&background=ddd6fe&color=5b21b6'"
+            >
+            <div class="mt-2">
+              <p class="text-sm font-medium">Lagos Security 2</p>
+              <p class="text-xs text-indigo-600">Security & Risk Team</p>
+              <p class="text-xs text-gray-500 mt-1">lagos.sec2@example.com</p>
+              <div class="mt-1 text-xs">
+                <span class="inline-block bg-gray-100 rounded-full px-2 py-0.5 text-gray-700">Lagos</span>
+                <span class="inline-block bg-indigo-100 rounded-full px-2 py-0.5 text-indigo-700 ml-1">state</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center text-xs text-gray-500 mt-6">
+      © 2023 Lagos State Team
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-center">
+                <h2 class="text-2xl font-bold text-white">Application Status</h2>
+                <p class="mt-2 text-blue-100">View your staff application status</p>
+            </div>
+            
+            <div class="px-6 py-8 space-y-6">
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="font-medium text-gray-700">Status:</span>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium 
+                            {% if application.status == 'Approved' %}bg-green-100 text-green-800
+                            {% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                            {{ application.status }}
+                        </span>
+                    </div>
+                    
+                    <div>
+                        <span class="font-medium text-gray-700">Submitted On:</span>
+                        <span class="text-gray-600">{{ application.created_at|date:"F j, Y" }}</span>
+                    </div>
+                    
+                    {% if application.admin_message %}
+                    <div class="mt-4 p-4 bg-gray-50 rounded-md">
+                        <h3 class="font-medium text-gray-700 mb-2">Admin Message:</h3>
+                        <p class="text-gray-600">{{ application.admin_message }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

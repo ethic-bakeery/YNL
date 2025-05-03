@@ -1,0 +1,24 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}{{ group.name }} Members{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>{{ group.name }} Members</h1>
+        <a href="{% url 'chat:group_chat' group.pk %}" class="btn btn-outline-primary">Back to Chat</a>    </div>
+    <div class="list-group">
+        {% for membership in members %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-1">{{ membership.user.username }}</h5>
+                    <small class="text-muted">Joined {{ membership.joined_at|timesince }} ago</small>
+                </div>
+                {% if membership.user == group.created_by %}
+                    <span class="badge bg-primary">Creator</span>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="alert alert-info">No members in this group yet.</div>
+        {% endfor %}
+    </div>
+{% endblock %}

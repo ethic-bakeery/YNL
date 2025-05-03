@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Site</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset default margin and padding */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Ensure body starts right after navbar */
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            padding-top: 64px; /* Height of your navbar */
+            box-sizing: border-box;
+        }
+        
+        /* Make navbar stick to the very top */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo and Desktop Navigation -->
+                <div class="flex">
+                    <!-- Logo -->
+                    <div class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="{{ logo_url|default:'/static/images/logo.png}" alt=""">
+                    </div>
+                    
+                    <!-- Desktop Navigation Links -->
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="{% url 'home' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'home' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Feeds
+                        </a>
+                        <a href="{% url 'event-detail' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'event-detail' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Events
+                        </a>
+                        <a href="{% url 'poll_list' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'poll_list' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Polls
+                        </a>
+                        {% if user.is_superuser %}
+                        <a href="{% url 'profile_list' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'profile_list' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Chats
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'chat:anonymous' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'anonymous' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Ghost Chat
+                        </a>
+                        <a href="{% url 'chat:received_messages' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'received_messages' %}border-primary-500 text-gray-900{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %} text-sm font-medium">
+                            Messages
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button and Profile Dropdown -->
+                <div class="flex items-center">
+                    <!-- Notifications - Optional -->
+                    <button class="p-2 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 mr-2">
+                        <span class="sr-only">View notifications</span>
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    
+                    <!-- Profile dropdown -->
+                    <div class="ml-3 relative">
+                        <div>
+                            <button type="button" onclick="toggleDropdown()" class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg transition-colors duration-200" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                <span class="sr-only">Open user menu</span>
+                                <div class="h-8 w-8 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
+                                    {% if user.profile.profile_picture %}
+                                    <img class="h-full w-full object-cover" src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}">
+                                    {% else %}
+                                    <div class="h-full w-full flex items-center justify-center bg-primary-100 text-primary-600">
+                                        <i class="fa-solid fa-user"></i>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <span class="text-sm font-medium text-gray-700 hidden sm:block">{{ user.username }}</span>
+                                <i class="fa-solid fa-angle-down text-gray-500"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Dropdown menu -->
+                        <div id="profile-dropdown" class="origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                            <!-- Dropdown header -->
+                            <div class="px-4 py-3 border-b border-gray-100">
+                                <p class="text-sm text-gray-500">Signed in as</p>
+                                <p class="text-sm font-medium text-gray-900 truncate">{{ user.username }}</p>
+                            </div>
+                            
+                            <!-- Admin actions -->
+                            {% if user.is_superuser %}
+                            <div class="py-1">
+                                <a href="{% url 'create-event' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fa-regular fa-calendar-plus w-5 h-5 mr-3 text-gray-400"></i>
+                                    Create Event
+                                </a>
+                                <a href="{% url 'create-post' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fa-regular fa-pen-to-square w-5 h-5 mr-3 text-gray-400"></i>
+                                    Create Post
+                                </a>
+                                <a href="{% url 'create_poll' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fa-solid fa-chart-simple w-5 h-5 mr-3 text-gray-400"></i>
+                                    Create Poll
+                                </a>
+                            </div>
+                            <div class="border-t border-gray-100"></div>
+                            {% endif %}
+                            
+                            <!-- User actions -->
+                            <div class="py-1">
+                                <a href="{% url 'staff_application' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                     <i class="fa-solid fa-user-plus w-5 h-5 mr-3 text-gray-400"></i>
+                                    Apply for Staff
+                                </a>
+                                <a href="{% url 'profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fa-regular fa-user w-5 h-5 mr-3 text-gray-400"></i>
+                                    Profile
+                                </a>
+                            </div>
+                            
+                            <!-- Logout -->
+                            <div class="border-t border-gray-100"></div>
+                            <div class="py-1">
+                                <a href="{% url 'logout' %}" class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50" role="menuitem">
+                                    <i class="fa-solid fa-arrow-right-from-bracket w-5 h-5 mr-3 text-red-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile menu button -->
+                    <div class="flex items-center sm:hidden ml-4">
+                        <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500" aria-controls="mobile-menu" aria-expanded="false">
+                            <span class="sr-only">Open main menu</span>
+                            <i class="fa-solid fa-bars block h-6 w-6" id="menu-icon-open"></i>
+                            <i class="fa-solid fa-xmark hidden h-6 w-6" id="menu-icon-close"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu, show/hide based on menu state -->
+        <div class="sm:hidden hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Home
+                </a>
+                <a href="{% url 'event-detail' %}" class="{% if request.resolver_match.url_name == 'event-detail' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Events
+                </a>
+                <a href="{% url 'poll_list' %}" class="{% if request.resolver_match.url_name == 'poll_list' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Polls
+                </a>
+                {% if user.is_superuser %}
+                <a href="{% url 'profile_list' %}" class="{% if request.resolver_match.url_name == 'profile_list' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Chats
+                </a>
+                {% endif %}
+                <a href="{% url 'chat:anonymous' %}" class="{% if request.resolver_match.url_name == 'anonymous' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Ghost Chat
+                </a>
+                <a href="{% url 'chat:received_messages' %}" class="{% if request.resolver_match.url_name == 'received_messages' %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+                    Messages
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+        
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIconOpen = document.getElementById('menu-icon-open');
+            const menuIconClose = document.getElementById('menu-icon-close');
+            
+            mobileMenu.classList.toggle('hidden');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        }
+        
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('profile-dropdown');
+            const button = document.getElementById('user-menu-button');
+            
+            if (!dropdown.contains(e.target) && !button.contains(e.target) && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

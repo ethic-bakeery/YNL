@@ -1,0 +1,17 @@
+{% for message in messages %}
+    <div class="chat-message {% if message.sender == user %}right{% else %}left{% endif %}">
+        <div class="message-content">
+            <div class="message-text">{{ message.message }}</div>
+            {% if message.image %}
+                <img src="{{ message.image.url }}" alt="Image">
+            {% endif %}
+            {% if message.voice %}
+                <audio controls>
+                    <source src="{{ message.voice.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            {% endif %}
+            <div class="message-timestamp">{{ message.timestamp }}</div>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,116 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 3rem auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input, textarea {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        input[type="datetime-local"] {
+            padding: 0.65rem;
+        }
+        input[type="file"] {
+            padding: 0.5rem;
+            border: 1px dashed #ddd;
+        }
+        button {
+            padding: 0.75rem;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create a New Event</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="{{ form.title.id_for_label }}">Event Title:</label>
+            {{ form.title }}
+
+            <label for="{{ form.description.id_for_label }}">Event Description:</label>
+            {{ form.description }}
+
+            <label for="{{ form.start_time.id_for_label }}">Start Time:</label>
+            <input 
+                type="datetime-local" 
+                id="{{ form.start_time.id_for_label }}" 
+                name="{{ form.start_time.html_name }}" 
+                value="{{ form.start_time.value|default:'now'|date:'Y-m-d\\TH:i' }}" 
+            />
+
+            <label for="{{ form.end_time.id_for_label }}">End Time:</label>
+            <input 
+                type="datetime-local" 
+                id="{{ form.end_time.id_for_label }}" 
+                name="{{ form.end_time.html_name }}" 
+                value="{{ form.end_time.value|default:'now'|date:'Y-m-d\\TH:i' }}" 
+            />
+
+            <label for="{{ form.location.id_for_label }}">Location:</label>
+            {{ form.location }}
+
+            <label for="{{ form.image.id_for_label }}">Event Image:</label>
+            <input type="file" 
+                   id="{{ form.image.id_for_label }}" 
+                   name="{{ form.image.html_name }}" 
+                   accept="image/*">
+
+            <button type="submit">Create Event</button>
+        </form>
+    </div>
+</body>
+</html>
+
+{% endblock %}

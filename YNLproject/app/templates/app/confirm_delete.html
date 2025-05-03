@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Deletion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #040e27;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 2rem;
+            max-width: 600px;
+            margin: 3rem auto;
+            background-color: #1e2a49;
+            border-radius: 8px;
+            text-align: center;
+        }
+        h2 {
+            color: #fff;
+        }
+        button {
+            padding: 0.5rem;
+            background-color: #dc3545;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete this message?</p>
+        <p><strong>First Name:</strong> {{ message.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ message.last_name }}</p>
+        <p><strong>Email:</strong> {{ message.email }}</p>
+        <p><strong>Message:</strong></p>
+        <p>{{ message.message }}</p>
+        <form method="post" action="{% url 'delete_contact_message' message.id %}">
+            {% csrf_token %}
+            <button type="submit">Confirm Delete</button>
+        </form>
+        <a href="{% url 'admin_contact_messages' %}" style="color: #4a5d7e; text-decoration: none;">Cancel</a>
+    </div>
+</body>
+</html>

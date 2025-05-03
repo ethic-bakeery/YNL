@@ -1,0 +1,136 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<div class="profile-create-container min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <!-- Form Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-center">
+                <h1 class="text-3xl font-bold text-white">Create Your Profile</h1>
+                <p class="mt-2 text-blue-100">Complete your profile to get started</p>
+            </div>
+
+            <!-- Messages/Alerts -->
+            {% if messages %}
+            <div class="px-6 pt-6">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-4 p-4 rounded-lg {% if message.tags == 'error' %}bg-red-50 text-red-800{% else %}bg-green-50 text-green-800{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Profile Form -->
+            <form method="POST" enctype="multipart/form-data" class="px-6 py-8 space-y-6">
+                {% csrf_token %}
+                
+                <!-- Two Column Layout for Larger Screens -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- First Name -->
+                    <div class="form-group">
+                        <label for="id_first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    
+                    <!-- Last Name -->
+                    <div class="form-group">
+                        <label for="id_last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                    
+                    <!-- State -->
+                    <div class="form-group">
+                        <label for="id_state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                        {{ form.state }}
+                    </div>
+                    
+                    <!-- Phone Number -->
+                    <div class="form-group">
+                        <label for="id_phone_number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        {{ form.phone_number }}
+                    </div>
+                    
+                    <!-- Date of Birth -->
+                    <div class="form-group">
+                        <label for="id_date_of_birth" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        {{ form.date_of_birth }}
+                    </div>
+                    
+                    <!-- Local Government -->
+                    <div class="form-group">
+                        <label for="id_local_government" class="block text-sm font-medium text-gray-700 mb-1">Local Government</label>
+                        {{ form.local_government }}
+                    </div>
+                </div>
+                
+                <!-- Profile Picture (Full Width) -->
+                <div class="form-group">
+                    <label for="id_profile_picture" class="block text-sm font-medium text-gray-700 mb-1">Profile Picture</label>
+                    <div class="mt-1 flex items-center">
+                        <span class="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100 mr-4">
+                            {% if form.instance.profile_picture %}
+                                <img src="{{ form.instance.profile_picture.url }}" alt="Current profile" class="h-full w-full object-cover">
+                            {% else %}
+                                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            {% endif %}
+                        </span>
+                        <div class="flex-1">
+                            {{ form.profile_picture }}
+                            <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="pt-6">
+                    <button type="submit" class="w-full md:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Save Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Form input styling that won't conflict with navbar */
+    .profile-create-container input[type="text"],
+    .profile-create-container input[type="tel"],
+    .profile-create-container input[type="date"],
+    .profile-create-container input[type="file"],
+    .profile-create-container select {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        background-color: white;
+        color: #374151;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    
+    .profile-create-container input:focus,
+    .profile-create-container select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    /* File input customization */
+    .profile-create-container input[type="file"] {
+        padding: 0.375rem 0.75rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .profile-create-container {
+            padding: 1.5rem 1rem;
+        }
+    }
+</style>
+{% endblock %}

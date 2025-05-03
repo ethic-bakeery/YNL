@@ -1,0 +1,136 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<div class="profile-view-container min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <!-- Profile Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-center">
+                <h2 class="text-3xl font-bold text-white">User Profile</h2>
+                <p class="mt-2 text-blue-100">Manage your account information</p>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="px-6 py-8 md:flex md:space-x-8">
+                <!-- Profile Picture Section -->
+                <div class="md:w-1/3 mb-8 md:mb-0 text-center">
+                    <div class="relative inline-block">
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" 
+                             class="h-48 w-48 rounded-full object-cover border-4 border-white shadow-md mx-auto">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'update_profile_picture' %}" 
+                              class="mt-6 space-y-4">
+                            {% csrf_token %}
+                            <label for="profile_picture" 
+                                   class="cursor-pointer flex items-center justify-center px-4 py-2 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 transition-colors">
+                                <i class="fas fa-camera mr-2"></i> Change Picture
+                                <input type="file" name="profile_picture" id="profile_picture" class="hidden">
+                            </label>
+                            <button type="submit" 
+                                    class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                Upload
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Profile Details Section -->
+                <div class="md:w-2/3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Personal Information -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-blue-800 border-b pb-2">Personal Information</h3>
+                            <div class="profile-detail">
+                                <span class="detail-label">First Name:</span>
+                                <span class="detail-value">{{ profile.first_name|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail">
+                                <span class="detail-label">Last Name:</span>
+                                <span class="detail-value">{{ profile.last_name|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail">
+                                <span class="detail-label">Date of Birth:</span>
+                                <span class="detail-value">{{ profile.date_of_birth|date:"F j, Y"|default:"Not provided" }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-blue-800 border-b pb-2">Contact Information</h3>
+                            <div class="profile-detail">
+                                <span class="detail-label">Phone Number:</span>
+                                <span class="detail-value">{{ profile.phone_number|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail">
+                                <span class="detail-label">State:</span>
+                                <span class="detail-value">{{ profile.state|default:"Not provided" }}</span>
+                            </div>
+                            <div class="profile-detail">
+                                <span class="detail-label">Local Government:</span>
+                                <span class="detail-value">{{ profile.local_government|default:"Not provided" }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bio Section -->
+                    {% if profile.bio %}
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-blue-800 border-b pb-2">About Me</h3>
+                        <div class="mt-4 p-4 bg-gray-50 rounded-md">
+                            <p class="text-gray-700">{{ profile.bio }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Edit Button -->
+                    <div class="mt-8 text-right">
+                        <a href="{% url 'update_profile' %}" 
+                           class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-edit mr-2"></i> Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Scoped styles that won't conflict with navbar */
+    .profile-view-container {
+        margin-top: 2rem;
+    }
+    
+    .profile-detail {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 0.5rem;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #4b5563;
+        width: 120px;
+        flex-shrink: 0;
+    }
+    
+    .detail-value {
+        color: #1f2937;
+        flex-grow: 1;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-view-container {
+            padding: 1rem;
+        }
+        
+        .profile-detail {
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            width: 100%;
+            margin-bottom: 0.25rem;
+        }
+    }
+</style>
+{% endblock %}

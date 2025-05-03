@@ -1,0 +1,112 @@
+
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Polls</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-12 max-w-6xl">
+        <!-- Header Section -->
+        <header class="mb-12 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-6">Available Polls</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Participate in current polls or create your own to gather opinions.</p>
+            <a href="{% url 'create_poll' %}" class="mt-4 inline-flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                Create New Poll
+            </a>
+        </header>
+
+        <!-- Polls Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if polls %}
+                {% for poll in polls %}
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-300 flex flex-col h-full">
+                        <!-- Poll Content -->
+                        <div class="p-6 flex-grow flex flex-col">
+                            <h2 class="text-xl font-bold text-gray-800 mb-2">
+                                <a href="{% url 'single_poll' poll.id %}" class="hover:text-primary-600 transition duration-200">{{ poll.name }}</a>
+                            </h2>
+                            
+                            <!-- Description -->
+                            {% if poll.description %}
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ poll.description }}</p>
+                            {% endif %}
+                            
+                            <!-- Metadata -->
+                            <div class="mt-auto pt-4 border-t border-gray-100">
+                                <div class="flex items-center text-sm text-gray-500 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                    <span>Created by {{ poll.created_by.username }}</span>
+                                </div>
+                                <div class="flex items-center text-xs text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span>Created on {{ poll.created_at|date:"M j, Y" }} at {{ poll.created_at|time:"g:i A" }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Button -->
+                            <a href="{% url 'single_poll' poll.id %}" class="mt-4 inline-flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white text-center py-2 px-4 rounded-lg transition duration-200 text-sm font-medium">
+                                Vote Now
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-full bg-white rounded-xl shadow-md p-8 text-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">No Polls Available</h3>
+                    <p class="text-gray-600 mb-4">There are currently no polls to display.</p>
+                    <a href="{% url 'create_poll' %}" class="inline-flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-lg shadow-sm transition duration-200">
+                        Create First Poll
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

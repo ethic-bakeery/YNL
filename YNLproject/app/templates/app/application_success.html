@@ -1,0 +1,33 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+    <div class="text-center">
+      <!-- Success icon -->
+      <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      
+      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+        Application Submitted Successfully
+      </h2>
+    </div>
+    
+    <div class="mt-8 space-y-6">
+      <p class="text-center text-gray-600">
+        Thank you for your application. We have received your request and will review it shortly. 
+        You will be notified once your request has been processed.
+      </p>
+      
+      <div class="mt-6 text-center">
+        <a href="{% url 'home' %}" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+          Return to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

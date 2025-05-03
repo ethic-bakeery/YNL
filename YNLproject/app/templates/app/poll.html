@@ -1,0 +1,239 @@
+{% extends 'app/user_navbar.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ poll.name }} - Vote</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        success: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        },
+                        danger: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        }
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="{% url 'poll_list' %}" class="inline-flex items-center text-primary-600 hover:text-primary-800 transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Polls
+            </a>
+        </div>
+
+        <!-- Messages -->
+        {% if success_message %}
+        <div class="mb-6 p-4 rounded-lg bg-success-100 border border-success-200 text-success-700">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                {{ success_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if error_message %}
+        <div class="mb-6 p-4 rounded-lg bg-danger-100 border border-danger-200 text-danger-700">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                {{ error_message }}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Poll Card -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="p-6 md:p-8">
+                <div class="flex justify-between items-start mb-2">
+                    <h2 class="text-2xl font-bold text-gray-800">{{ poll.name }}</h2>
+                    <div class="text-sm text-gray-500">
+                        <span class="font-medium">Created:</span> 
+                        {{ poll.created_at|date:"M j, Y" }}
+                    </div>
+                </div>
+                
+                {% if poll.description %}
+                <p class="text-gray-600 mb-6">{{ poll.description }}</p>
+                {% endif %}
+                
+                <!-- Creator Info -->
+                <div class="flex items-center text-sm text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>Created by {{ poll.created_by.username }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voting Section -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <div class="p-6 md:p-8">
+                {% if user_vote %}
+                    <div class="text-center py-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-primary-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">You've Already Voted</h3>
+                        <p class="text-gray-600 mb-4">You selected: <span class="font-medium">{{ user_vote.choice.text }}</span></p>
+                        <p class="text-gray-500 text-sm">Thank you for participating in this poll.</p>
+                    </div>
+                {% else %}
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Cast Your Vote</h3>
+                    <form method="post" class="space-y-4">
+                        {% csrf_token %}
+                        {% for choice in poll.choices.all %}
+                        <div class="flex items-center">
+                            <input type="radio" name="choice_id" id="choice-{{ choice.id }}" value="{{ choice.id }}" 
+                                   class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded-full">
+                            <label for="choice-{{ choice.id }}" class="ml-3 block text-gray-700">
+                                {{ choice.text }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="pt-4 border-t border-gray-200 flex justify-end">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-6 py-3 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition">
+                                Submit Vote
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        {% if poll_results %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="p-6 md:p-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Poll Results</h3>
+                
+                <!-- Google Charts Container -->
+                <div id="piechart" class="w-full h-96"></div>
+                
+                <!-- Results Table -->
+                <div class="mt-6 overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Choice</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Votes</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for result in poll_results %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ result.0 }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ result.1 }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ result.2|floatformat:1 }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Charts Script -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            var poll_results = {{ poll_results|safe }};
+
+            // Load Google Charts
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            // Draw the chart and set the chart values
+            function drawChart() {
+                poll_results.unshift(["Choice", "Vote Count"]);
+                var data = google.visualization.arrayToDataTable(poll_results);
+
+                // Chart options
+                var options = {
+                    'width': '100%',
+                    'height': 400,
+                    'pieHole': 0.4,
+                    'pieSliceText': 'value',
+                    'chartArea': { 'width': '90%', 'height': '90%' },
+                    'colors': ['#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd', '#0284c7', '#0369a1'],
+                    'legend': { 'position': 'labeled', 'textStyle': { 'fontSize': 14 } },
+                    'tooltip': { 'text': 'percentage' }
+                };
+
+                // Display the chart
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+                
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    chart.draw(data, options);
+                });
+            }
+        </script>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+{% endblock %}
